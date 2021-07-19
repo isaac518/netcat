@@ -1,0 +1,408 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ACLOCAL	/usr/local/src/netcat-0.7.1/src/Makefile	/^ACLOCAL = ${SHELL} \/root\/src\/netcat-0.7.1\/missing --run aclocal-1.7$/;"	m
+ACLOCAL_M4	/usr/local/src/netcat-0.7.1/src/Makefile	/^ACLOCAL_M4 = $(top_srcdir)\/aclocal.m4$/;"	m
+ALLOCA	/usr/local/src/netcat-0.7.1/src/Makefile	/^ALLOCA = $/;"	m
+AMDEP_FALSE	/usr/local/src/netcat-0.7.1/src/Makefile	/^AMDEP_FALSE = #$/;"	m
+AMDEP_TRUE	/usr/local/src/netcat-0.7.1/src/Makefile	/^AMDEP_TRUE = $/;"	m
+AMTAR	/usr/local/src/netcat-0.7.1/src/Makefile	/^AMTAR = ${SHELL} \/root\/src\/netcat-0.7.1\/missing --run tar$/;"	m
+AUTOCONF	/usr/local/src/netcat-0.7.1/src/Makefile	/^AUTOCONF = ${SHELL} \/root\/src\/netcat-0.7.1\/missing --run autoconf$/;"	m
+AUTOHEADER	/usr/local/src/netcat-0.7.1/src/Makefile	/^AUTOHEADER = ${SHELL} \/root\/src\/netcat-0.7.1\/missing --run autoheader$/;"	m
+AUTOMAKE	/usr/local/src/netcat-0.7.1/src/Makefile	/^AUTOMAKE = ${SHELL} \/root\/src\/netcat-0.7.1\/missing --run automake-1.7$/;"	m
+AWK	/usr/local/src/netcat-0.7.1/src/Makefile	/^AWK = gawk$/;"	m
+BOOL_TO_STR	/usr/local/src/netcat-0.7.1/src/netcat.h	128;"	d
+CC	/usr/local/src/netcat-0.7.1/src/Makefile	/^CC = gcc$/;"	m
+CCDEPMODE	/usr/local/src/netcat-0.7.1/src/Makefile	/^CCDEPMODE = depmode=none$/;"	m
+CCLD	/usr/local/src/netcat-0.7.1/src/Makefile	/^CCLD = $(CC)$/;"	m
+CFLAGS	/usr/local/src/netcat-0.7.1/src/Makefile	/^CFLAGS = -g -O2 -Wall -O0 -g3 -ggdb3 -DDEBUG$/;"	m
+COMPILE	/usr/local/src/netcat-0.7.1/src/Makefile	/^COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \\$/;"	m
+CONFIG_CLEAN_FILES	/usr/local/src/netcat-0.7.1/src/Makefile	/^CONFIG_CLEAN_FILES =$/;"	m
+CONFIG_HEADER	/usr/local/src/netcat-0.7.1/src/Makefile	/^CONFIG_HEADER = $(top_builddir)\/config.h$/;"	m
+CONTRIBLIBS	/usr/local/src/netcat-0.7.1/src/Makefile	/^CONTRIBLIBS = $/;"	m
+CPP	/usr/local/src/netcat-0.7.1/src/Makefile	/^CPP = gcc -E$/;"	m
+CPPFLAGS	/usr/local/src/netcat-0.7.1/src/Makefile	/^CPPFLAGS = $/;"	m
+CTAGS	/usr/local/src/netcat-0.7.1/src/Makefile	/^CTAGS = ctags$/;"	m
+CTAGSFLAGS	/usr/local/src/netcat-0.7.1/src/Makefile	/^CTAGSFLAGS =$/;"	m
+CYGPATH_W	/usr/local/src/netcat-0.7.1/src/Makefile	/^CYGPATH_W = echo$/;"	m
+DEFAULT_INCLUDES	/usr/local/src/netcat-0.7.1/src/Makefile	/^DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)$/;"	m
+DEFS	/usr/local/src/netcat-0.7.1/src/Makefile	/^DEFS = -DLOCALEDIR=\\"\\$(localedir)\\" -DHAVE_CONFIG_H$/;"	m
+DEPDIR	/usr/local/src/netcat-0.7.1/src/Makefile	/^DEPDIR = .deps$/;"	m
+DISTFILES	/usr/local/src/netcat-0.7.1/src/Makefile	/^DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)$/;"	m
+DIST_COMMON	/usr/local/src/netcat-0.7.1/src/Makefile	/^DIST_COMMON = Makefile.am Makefile.in$/;"	m
+DIST_SOURCES	/usr/local/src/netcat-0.7.1/src/Makefile	/^DIST_SOURCES = $(netcat_SOURCES)$/;"	m
+ECHO_C	/usr/local/src/netcat-0.7.1/src/Makefile	/^ECHO_C = $/;"	m
+ECHO_N	/usr/local/src/netcat-0.7.1/src/Makefile	/^ECHO_N = -n$/;"	m
+ECHO_T	/usr/local/src/netcat-0.7.1/src/Makefile	/^ECHO_T = $/;"	m
+EGREP	/usr/local/src/netcat-0.7.1/src/Makefile	/^EGREP = grep -E$/;"	m
+ETAGS	/usr/local/src/netcat-0.7.1/src/Makefile	/^ETAGS = etags$/;"	m
+ETAGSFLAGS	/usr/local/src/netcat-0.7.1/src/Makefile	/^ETAGSFLAGS =$/;"	m
+EXEEXT	/usr/local/src/netcat-0.7.1/src/Makefile	/^EXEEXT = $/;"	m
+EXTRA_DIST	/usr/local/src/netcat-0.7.1/src/Makefile	/^EXTRA_DIST = *.h$/;"	m
+FALSE	/usr/local/src/netcat-0.7.1/src/netcat.h	119;"	d
+GLIBC21	/usr/local/src/netcat-0.7.1/src/Makefile	/^GLIBC21 = yes$/;"	m
+GMSGFMT	/usr/local/src/netcat-0.7.1/src/Makefile	/^GMSGFMT = \/usr\/bin\/msgfmt$/;"	m
+INADDR_NONE	/usr/local/src/netcat-0.7.1/src/netcat.h	105;"	d
+INSTALL	/usr/local/src/netcat-0.7.1/src/Makefile	/^INSTALL = \/usr\/bin\/install -c$/;"	m
+INSTALL_DATA	/usr/local/src/netcat-0.7.1/src/Makefile	/^INSTALL_DATA = ${INSTALL} -m 644$/;"	m
+INSTALL_HEADER	/usr/local/src/netcat-0.7.1/src/Makefile	/^INSTALL_HEADER = $(INSTALL_DATA)$/;"	m
+INSTALL_PROGRAM	/usr/local/src/netcat-0.7.1/src/Makefile	/^INSTALL_PROGRAM = ${INSTALL}$/;"	m
+INSTALL_SCRIPT	/usr/local/src/netcat-0.7.1/src/Makefile	/^INSTALL_SCRIPT = ${INSTALL}$/;"	m
+INSTALL_STRIP_PROGRAM	/usr/local/src/netcat-0.7.1/src/Makefile	/^INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s$/;"	m
+INTLBISON	/usr/local/src/netcat-0.7.1/src/Makefile	/^INTLBISON = bison$/;"	m
+INTLLIBS	/usr/local/src/netcat-0.7.1/src/Makefile	/^INTLLIBS = $/;"	m
+LDFLAGS	/usr/local/src/netcat-0.7.1/src/Makefile	/^LDFLAGS = $/;"	m
+LIBICONV	/usr/local/src/netcat-0.7.1/src/Makefile	/^LIBICONV = $/;"	m
+LIBINTL	/usr/local/src/netcat-0.7.1/src/Makefile	/^LIBINTL = $/;"	m
+LIBOBJS	/usr/local/src/netcat-0.7.1/src/Makefile	/^LIBOBJS = $/;"	m
+LIBS	/usr/local/src/netcat-0.7.1/src/Makefile	/^LIBS = $/;"	m
+LINK	/usr/local/src/netcat-0.7.1/src/Makefile	/^LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@$/;"	m
+LTLIBICONV	/usr/local/src/netcat-0.7.1/src/Makefile	/^LTLIBICONV = $/;"	m
+LTLIBINTL	/usr/local/src/netcat-0.7.1/src/Makefile	/^LTLIBINTL = $/;"	m
+LTLIBOBJS	/usr/local/src/netcat-0.7.1/src/Makefile	/^LTLIBOBJS = $/;"	m
+MAKEINFO	/usr/local/src/netcat-0.7.1/src/Makefile	/^MAKEINFO = ${SHELL} \/root\/src\/netcat-0.7.1\/missing --run makeinfo$/;"	m
+MAXHOSTNAMELEN	/usr/local/src/netcat-0.7.1/src/netcat.h	110;"	d
+MAXHOSTNAMELEN	/usr/local/src/netcat-0.7.1/src/netcat.h	112;"	d
+MAXINETADDRS	/usr/local/src/netcat-0.7.1/src/netcat.h	102;"	d
+MKINSTALLDIRS	/usr/local/src/netcat-0.7.1/src/Makefile	/^MKINSTALLDIRS = .\/mkinstalldirs$/;"	m
+MSGFMT	/usr/local/src/netcat-0.7.1/src/Makefile	/^MSGFMT = \/usr\/bin\/msgfmt$/;"	m
+MSGMERGE	/usr/local/src/netcat-0.7.1/src/Makefile	/^MSGMERGE = \/usr\/bin\/msgmerge$/;"	m
+NCPRINT_DEBUG	/usr/local/src/netcat-0.7.1/src/misc.h	42;"	d
+NCPRINT_DEBUG_V	/usr/local/src/netcat-0.7.1/src/misc.h	45;"	d
+NCPRINT_DELAY	/usr/local/src/netcat-0.7.1/src/misc.h	31;"	d
+NCPRINT_ERROR	/usr/local/src/netcat-0.7.1/src/misc.h	48;"	d
+NCPRINT_EXIT	/usr/local/src/netcat-0.7.1/src/misc.h	32;"	d
+NCPRINT_NOFMT	/usr/local/src/netcat-0.7.1/src/misc.h	35;"	d
+NCPRINT_NONEWLINE	/usr/local/src/netcat-0.7.1/src/misc.h	30;"	d
+NCPRINT_NORMAL	/usr/local/src/netcat-0.7.1/src/misc.h	39;"	d
+NCPRINT_NOTICE	/usr/local/src/netcat-0.7.1/src/misc.h	54;"	d
+NCPRINT_STDOUT	/usr/local/src/netcat-0.7.1/src/misc.h	29;"	d
+NCPRINT_VERB1	/usr/local/src/netcat-0.7.1/src/misc.h	33;"	d
+NCPRINT_VERB2	/usr/local/src/netcat-0.7.1/src/misc.h	34;"	d
+NCPRINT_WAITTIME	/usr/local/src/netcat-0.7.1/src/misc.h	26;"	d
+NCPRINT_WARNING	/usr/local/src/netcat-0.7.1/src/misc.h	51;"	d
+NEED_GETOPT_FALSE	/usr/local/src/netcat-0.7.1/src/Makefile	/^NEED_GETOPT_FALSE = $/;"	m
+NEED_GETOPT_TRUE	/usr/local/src/netcat-0.7.1/src/Makefile	/^NEED_GETOPT_TRUE = #$/;"	m
+NETCAT_ADDRSTRLEN	/usr/local/src/netcat-0.7.1/src/netcat.h	81;"	d
+NETCAT_ADDRSTRLEN	/usr/local/src/netcat-0.7.1/src/netcat.h	83;"	d
+NETCAT_CONNECT	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  NETCAT_CONNECT,$/;"	e	enum:__anon1
+NETCAT_H	/usr/local/src/netcat-0.7.1/src/netcat.h	26;"	d
+NETCAT_LISTEN	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  NETCAT_LISTEN,$/;"	e	enum:__anon1
+NETCAT_MAXPORTNAMELEN	/usr/local/src/netcat-0.7.1/src/netcat.h	88;"	d
+NETCAT_PROTO_TCP	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  NETCAT_PROTO_TCP,$/;"	e	enum:__anon2
+NETCAT_PROTO_UDP	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  NETCAT_PROTO_UDP$/;"	e	enum:__anon2
+NETCAT_PROTO_UNSPEC	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  NETCAT_PROTO_UNSPEC,$/;"	e	enum:__anon2
+NETCAT_TUNNEL	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  NETCAT_TUNNEL$/;"	e	enum:__anon1
+NETCAT_UNSPEC	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  NETCAT_UNSPEC,$/;"	e	enum:__anon1
+NORMAL_INSTALL	/usr/local/src/netcat-0.7.1/src/Makefile	/^NORMAL_INSTALL = :$/;"	m
+NORMAL_UNINSTALL	/usr/local/src/netcat-0.7.1/src/Makefile	/^NORMAL_UNINSTALL = :$/;"	m
+NULL_STR	/usr/local/src/netcat-0.7.1/src/netcat.h	129;"	d
+N_	/usr/local/src/netcat-0.7.1/src/intl.h	36;"	d
+N_	/usr/local/src/netcat-0.7.1/src/intl.h	52;"	d
+OBJEXT	/usr/local/src/netcat-0.7.1/src/Makefile	/^OBJEXT = o$/;"	m
+PACKAGE	/usr/local/src/netcat-0.7.1/src/Makefile	/^PACKAGE = netcat$/;"	m
+PACKAGE_BUGREPORT	/usr/local/src/netcat-0.7.1/src/Makefile	/^PACKAGE_BUGREPORT = $/;"	m
+PACKAGE_NAME	/usr/local/src/netcat-0.7.1/src/Makefile	/^PACKAGE_NAME = $/;"	m
+PACKAGE_STRING	/usr/local/src/netcat-0.7.1/src/Makefile	/^PACKAGE_STRING = $/;"	m
+PACKAGE_TARNAME	/usr/local/src/netcat-0.7.1/src/Makefile	/^PACKAGE_TARNAME = $/;"	m
+PACKAGE_VERSION	/usr/local/src/netcat-0.7.1/src/Makefile	/^PACKAGE_VERSION = $/;"	m
+PATH_SEPARATOR	/usr/local/src/netcat-0.7.1/src/Makefile	/^PATH_SEPARATOR = :$/;"	m
+PERL	/usr/local/src/netcat-0.7.1/src/Makefile	/^PERL = \/usr\/bin\/perl$/;"	m
+PL_	/usr/local/src/netcat-0.7.1/src/intl.h	37;"	d
+PL_	/usr/local/src/netcat-0.7.1/src/intl.h	53;"	d
+POD2MAN	/usr/local/src/netcat-0.7.1/src/Makefile	/^POD2MAN = \/usr\/bin\/pod2man$/;"	m
+POST_INSTALL	/usr/local/src/netcat-0.7.1/src/Makefile	/^POST_INSTALL = :$/;"	m
+POST_UNINSTALL	/usr/local/src/netcat-0.7.1/src/Makefile	/^POST_UNINSTALL = :$/;"	m
+POSUB	/usr/local/src/netcat-0.7.1/src/Makefile	/^POSUB = po$/;"	m
+PRE_INSTALL	/usr/local/src/netcat-0.7.1/src/Makefile	/^PRE_INSTALL = :$/;"	m
+PRE_UNINSTALL	/usr/local/src/netcat-0.7.1/src/Makefile	/^PRE_UNINSTALL = :$/;"	m
+PROGRAMS	/usr/local/src/netcat-0.7.1/src/Makefile	/^PROGRAMS = $(bin_PROGRAMS)$/;"	m
+RAND	/usr/local/src/netcat-0.7.1/src/netcat.h	68;"	d
+RAND	/usr/local/src/netcat-0.7.1/src/netcat.h	72;"	d
+RANLIB	/usr/local/src/netcat-0.7.1/src/Makefile	/^RANLIB = ranlib$/;"	m
+SET_MAKE	/usr/local/src/netcat-0.7.1/src/Makefile	/^SET_MAKE = $/;"	m
+SHELL	/usr/local/src/netcat-0.7.1/src/Makefile	/^SHELL = \/bin\/sh$/;"	m
+SHUT_RDWR	/usr/local/src/netcat-0.7.1/src/netcat.h	61;"	d
+SIOCGLIFADDR	/usr/local/src/netcat-0.7.1/src/udphelper.c	52;"	d	file:
+SIOCGLIFCONF	/usr/local/src/netcat-0.7.1/src/udphelper.c	40;"	d	file:
+SIOCGLIFDSTADDR	/usr/local/src/netcat-0.7.1/src/udphelper.c	54;"	d	file:
+SIOCGLIFFLAGS	/usr/local/src/netcat-0.7.1/src/udphelper.c	53;"	d	file:
+SIOCGLIFNETMASK	/usr/local/src/netcat-0.7.1/src/udphelper.c	55;"	d	file:
+SOURCES	/usr/local/src/netcat-0.7.1/src/Makefile	/^SOURCES = $(netcat_SOURCES)$/;"	m
+SRAND	/usr/local/src/netcat-0.7.1/src/netcat.h	67;"	d
+SRAND	/usr/local/src/netcat-0.7.1/src/netcat.h	71;"	d
+STDERR_FILENO	/usr/local/src/netcat-0.7.1/src/netcat.h	58;"	d
+STDIN_FILENO	/usr/local/src/netcat-0.7.1/src/netcat.h	52;"	d
+STDOUT_FILENO	/usr/local/src/netcat-0.7.1/src/netcat.h	55;"	d
+STRIP	/usr/local/src/netcat-0.7.1/src/Makefile	/^STRIP = $/;"	m
+TELNET_AO	/usr/local/src/netcat-0.7.1/src/telnet.c	39;"	d	file:
+TELNET_AYT	/usr/local/src/netcat-0.7.1/src/telnet.c	40;"	d	file:
+TELNET_BRK	/usr/local/src/netcat-0.7.1/src/telnet.c	37;"	d	file:
+TELNET_DM	/usr/local/src/netcat-0.7.1/src/telnet.c	34;"	d	file:
+TELNET_DO	/usr/local/src/netcat-0.7.1/src/telnet.c	51;"	d	file:
+TELNET_DONT	/usr/local/src/netcat-0.7.1/src/telnet.c	55;"	d	file:
+TELNET_EC	/usr/local/src/netcat-0.7.1/src/telnet.c	41;"	d	file:
+TELNET_EL	/usr/local/src/netcat-0.7.1/src/telnet.c	42;"	d	file:
+TELNET_GA	/usr/local/src/netcat-0.7.1/src/telnet.c	43;"	d	file:
+TELNET_IAC	/usr/local/src/netcat-0.7.1/src/telnet.c	59;"	d	file:
+TELNET_IP	/usr/local/src/netcat-0.7.1/src/telnet.c	38;"	d	file:
+TELNET_NOP	/usr/local/src/netcat-0.7.1/src/telnet.c	33;"	d	file:
+TELNET_SB	/usr/local/src/netcat-0.7.1/src/telnet.c	44;"	d	file:
+TELNET_SE	/usr/local/src/netcat-0.7.1/src/telnet.c	32;"	d	file:
+TELNET_WILL	/usr/local/src/netcat-0.7.1/src/telnet.c	46;"	d	file:
+TELNET_WONT	/usr/local/src/netcat-0.7.1/src/telnet.c	49;"	d	file:
+TIMEVAL_DIFF	/usr/local/src/netcat-0.7.1/src/misc.c	390;"	d	file:
+TRUE	/usr/local/src/netcat-0.7.1/src/netcat.h	116;"	d
+USE_NLS	/usr/local/src/netcat-0.7.1/src/Makefile	/^USE_NLS = yes$/;"	m
+USE_PKTINFO	/usr/local/src/netcat-0.7.1/src/netcat.h	94;"	d
+USE_RANDOM	/usr/local/src/netcat-0.7.1/src/netcat.h	66;"	d
+USE_RANDOM	/usr/local/src/netcat-0.7.1/src/netcat.h	70;"	d
+VERSION	/usr/local/src/netcat-0.7.1/src/Makefile	/^VERSION = 0.7.1$/;"	m
+XGETTEXT	/usr/local/src/netcat-0.7.1/src/Makefile	/^XGETTEXT = \/usr\/bin\/xgettext$/;"	m
+_	/usr/local/src/netcat-0.7.1/src/intl.h	35;"	d
+_	/usr/local/src/netcat-0.7.1/src/intl.h	51;"	d
+ac_ct_CC	/usr/local/src/netcat-0.7.1/src/Makefile	/^ac_ct_CC = gcc$/;"	m
+ac_ct_RANLIB	/usr/local/src/netcat-0.7.1/src/Makefile	/^ac_ct_RANLIB = ranlib$/;"	m
+ac_ct_STRIP	/usr/local/src/netcat-0.7.1/src/Makefile	/^ac_ct_STRIP = $/;"	m
+addrs	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  char addrs[MAXINETADDRS][NETCAT_ADDRSTRLEN];	\/* ascii-format IP addresses *\/$/;"	m	struct:__anon4
+all_includes	/usr/local/src/netcat-0.7.1/src/Makefile	/^all_includes =  $/;"	m
+all_libraries	/usr/local/src/netcat-0.7.1/src/Makefile	/^all_libraries =  $/;"	m
+am__cd	/usr/local/src/netcat-0.7.1/src/Makefile	/^am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd$/;"	m
+am__depfiles_maybe	/usr/local/src/netcat-0.7.1/src/Makefile	/^am__depfiles_maybe =$/;"	m
+am__fastdepCC_FALSE	/usr/local/src/netcat-0.7.1/src/Makefile	/^am__fastdepCC_FALSE = $/;"	m
+am__fastdepCC_TRUE	/usr/local/src/netcat-0.7.1/src/Makefile	/^am__fastdepCC_TRUE = #$/;"	m
+am__include	/usr/local/src/netcat-0.7.1/src/Makefile	/^am__include = include$/;"	m
+am__leading_dot	/usr/local/src/netcat-0.7.1/src/Makefile	/^am__leading_dot = .$/;"	m
+am__quote	/usr/local/src/netcat-0.7.1/src/Makefile	/^am__quote = $/;"	m
+am_netcat_OBJECTS	/usr/local/src/netcat-0.7.1/src/Makefile	/^am_netcat_OBJECTS = core.$(OBJEXT) flagset.$(OBJEXT) misc.$(OBJEXT) \\$/;"	m
+ascnum	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  char ascnum[8];			\/* ascii port number *\/$/;"	m	struct:__anon5
+binPROGRAMS_INSTALL	/usr/local/src/netcat-0.7.1/src/Makefile	/^binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)$/;"	m
+bin_PROGRAMS	/usr/local/src/netcat-0.7.1/src/Makefile	/^bin_PROGRAMS = netcat$(EXEEXT)$/;"	m
+bin_PROGRAMS	/usr/local/src/netcat-0.7.1/src/Makefile	/^bin_PROGRAMS = netcat$/;"	m
+bind_textdomain_codeset	/usr/local/src/netcat-0.7.1/src/intl.h	49;"	d
+bindir	/usr/local/src/netcat-0.7.1/src/Makefile	/^bindir = ${exec_prefix}\/bin$/;"	m
+bindtextdomain	/usr/local/src/netcat-0.7.1/src/intl.h	48;"	d
+bool	/usr/local/src/netcat-0.7.1/src/netcat.h	125;"	d
+build	/usr/local/src/netcat-0.7.1/src/Makefile	/^build = i686-pc-linux-gnu$/;"	m
+build_alias	/usr/local/src/netcat-0.7.1/src/Makefile	/^build_alias = $/;"	m
+build_cpu	/usr/local/src/netcat-0.7.1/src/Makefile	/^build_cpu = i686$/;"	m
+build_os	/usr/local/src/netcat-0.7.1/src/Makefile	/^build_os = linux-gnu$/;"	m
+build_triplet	/usr/local/src/netcat-0.7.1/src/Makefile	/^build_triplet = i686-pc-linux-gnu$/;"	m
+build_vendor	/usr/local/src/netcat-0.7.1/src/Makefile	/^build_vendor = pc$/;"	m
+bytes_recv	/usr/local/src/netcat-0.7.1/src/core.c	/^unsigned long bytes_recv = 0;		\/* total bytes sent *\/$/;"	v
+bytes_recv	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern unsigned long bytes_sent, bytes_recv;$/;"	x
+bytes_sent	/usr/local/src/netcat-0.7.1/src/core.c	/^unsigned long bytes_sent = 0;		\/* total bytes received *\/$/;"	v
+bytes_sent	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern unsigned long bytes_sent, bytes_recv;$/;"	x
+commandline_need_newline	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool commandline_need_newline = FALSE;	\/* fancy output handling *\/$/;"	v
+commandline_need_newline	/usr/local/src/netcat-0.7.1/src/proto.h	/^	commandline_need_newline;$/;"	x
+core_connect	/usr/local/src/netcat-0.7.1/src/core.c	/^int core_connect(nc_sock_t *ncsock)$/;"	f	signature:(nc_sock_t *ncsock)
+core_connect	/usr/local/src/netcat-0.7.1/src/proto.h	/^int core_connect(nc_sock_t *ncsock);$/;"	p	signature:(nc_sock_t *ncsock)
+core_listen	/usr/local/src/netcat-0.7.1/src/core.c	/^int core_listen(nc_sock_t *ncsock)$/;"	f	signature:(nc_sock_t *ncsock)
+core_listen	/usr/local/src/netcat-0.7.1/src/proto.h	/^int core_listen(nc_sock_t *ncsock);$/;"	p	signature:(nc_sock_t *ncsock)
+core_readwrite	/usr/local/src/netcat-0.7.1/src/core.c	/^int core_readwrite(nc_sock_t *nc_main, nc_sock_t *nc_slave)$/;"	f	signature:(nc_sock_t *nc_main, nc_sock_t *nc_slave)
+core_readwrite	/usr/local/src/netcat-0.7.1/src/proto.h	/^int core_readwrite(nc_sock_t *nc_main, nc_sock_t *nc_slave);$/;"	p	signature:(nc_sock_t *nc_main, nc_sock_t *nc_slave)
+core_tcp_connect	/usr/local/src/netcat-0.7.1/src/core.c	/^static int core_tcp_connect(nc_sock_t *ncsock)$/;"	f	file:	signature:(nc_sock_t *ncsock)
+core_tcp_listen	/usr/local/src/netcat-0.7.1/src/core.c	/^static int core_tcp_listen(nc_sock_t *ncsock)$/;"	f	file:	signature:(nc_sock_t *ncsock)
+core_udp_connect	/usr/local/src/netcat-0.7.1/src/core.c	/^static int core_udp_connect(nc_sock_t *ncsock)$/;"	f	file:	signature:(nc_sock_t *ncsock)
+core_udp_listen	/usr/local/src/netcat-0.7.1/src/core.c	/^static int core_udp_listen(nc_sock_t *ncsock)$/;"	f	file:	signature:(nc_sock_t *ncsock)
+datadir	/usr/local/src/netcat-0.7.1/src/Makefile	/^datadir = ${prefix}\/share$/;"	m
+debug	/usr/local/src/netcat-0.7.1/src/misc.h	58;"	d
+debug	/usr/local/src/netcat-0.7.1/src/misc.h	67;"	d
+debug_d	/usr/local/src/netcat-0.7.1/src/misc.h	60;"	d
+debug_d	/usr/local/src/netcat-0.7.1/src/misc.h	68;"	d
+debug_dv	/usr/local/src/netcat-0.7.1/src/misc.h	64;"	d
+debug_dv	/usr/local/src/netcat-0.7.1/src/misc.h	70;"	d
+debug_fmt	/usr/local/src/netcat-0.7.1/src/misc.c	/^const char *debug_fmt(const char *fmt, ...)$/;"	f	signature:(const char *fmt, ...)
+debug_fmt	/usr/local/src/netcat-0.7.1/src/proto.h	/^const char *debug_fmt(const char *fmt, ...);$/;"	p	signature:(const char *fmt, ...)
+debug_v	/usr/local/src/netcat-0.7.1/src/misc.h	62;"	d
+debug_v	/usr/local/src/netcat-0.7.1/src/misc.h	69;"	d
+depcomp	/usr/local/src/netcat-0.7.1/src/Makefile	/^depcomp =$/;"	m
+distdir	/usr/local/src/netcat-0.7.1/src/Makefile	/^distdir = $(top_distdir)\/$(PACKAGE)-$(VERSION)$/;"	m
+domain	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  int fd, domain, timeout;$/;"	m	struct:__anon6
+exec_prefix	/usr/local/src/netcat-0.7.1/src/Makefile	/^exec_prefix = ${prefix}$/;"	m
+fd	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  int fd, domain, timeout;$/;"	m	struct:__anon6
+flagset	/usr/local/src/netcat-0.7.1/src/flagset.c	/^static char *flagset = NULL;$/;"	v	file:
+flagset_len	/usr/local/src/netcat-0.7.1/src/flagset.c	/^static size_t flagset_len = 0;$/;"	v	file:
+got_int	/usr/local/src/netcat-0.7.1/src/netcat.c	/^static void got_int(int z)$/;"	f	file:	signature:(int z)
+got_sigint	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool got_sigint = FALSE;	\/* when this TRUE the application should exit *\/$/;"	v
+got_sigint	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern bool use_stdin, signal_handler, got_sigterm, got_sigint, got_sigusr1,$/;"	x
+got_sigterm	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool got_sigterm = FALSE;	\/* when this TRUE the application must exit *\/$/;"	v
+got_sigterm	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern bool use_stdin, signal_handler, got_sigterm, got_sigint, got_sigusr1,$/;"	x
+got_sigusr1	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool got_sigusr1 = FALSE;	\/* when set, the application should print stats *\/$/;"	v
+got_sigusr1	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern bool use_stdin, signal_handler, got_sigterm, got_sigint, got_sigusr1,$/;"	x
+got_term	/usr/local/src/netcat-0.7.1/src/netcat.c	/^static void got_term(int z)$/;"	f	file:	signature:(int z)
+got_usr1	/usr/local/src/netcat-0.7.1/src/netcat.c	/^static void got_usr1(int z)$/;"	f	file:	signature:(int z)
+head	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  unsigned char *head;$/;"	m	struct:__anon3
+host	/usr/local/src/netcat-0.7.1/src/Makefile	/^host = i686-pc-linux-gnu$/;"	m
+host	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  nc_host_t local_host, host;$/;"	m	struct:__anon6
+host_alias	/usr/local/src/netcat-0.7.1/src/Makefile	/^host_alias = $/;"	m
+host_cpu	/usr/local/src/netcat-0.7.1/src/Makefile	/^host_cpu = i686$/;"	m
+host_os	/usr/local/src/netcat-0.7.1/src/Makefile	/^host_os = linux-gnu$/;"	m
+host_triplet	/usr/local/src/netcat-0.7.1/src/Makefile	/^host_triplet = i686-pc-linux-gnu$/;"	m
+host_vendor	/usr/local/src/netcat-0.7.1/src/Makefile	/^host_vendor = pc$/;"	m
+iaddrs	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  struct in_addr iaddrs[MAXINETADDRS];		\/* real addresses *\/$/;"	m	struct:__anon4	typeref:struct:__anon4::in_addr
+in_port_t	/usr/local/src/netcat-0.7.1/src/netcat.h	/^typedef unsigned short in_port_t;$/;"	t
+includedir	/usr/local/src/netcat-0.7.1/src/Makefile	/^includedir = ${prefix}\/include$/;"	m
+infodir	/usr/local/src/netcat-0.7.1/src/Makefile	/^infodir = ${prefix}\/info$/;"	m
+install_sh	/usr/local/src/netcat-0.7.1/src/Makefile	/^install_sh = \/root\/src\/netcat-0.7.1\/install-sh$/;"	m
+install_sh_DATA	/usr/local/src/netcat-0.7.1/src/Makefile	/^install_sh_DATA = $(install_sh) -c -m 644$/;"	m
+install_sh_PROGRAM	/usr/local/src/netcat-0.7.1/src/Makefile	/^install_sh_PROGRAM = $(install_sh) -c$/;"	m
+install_sh_SCRIPT	/usr/local/src/netcat-0.7.1/src/Makefile	/^install_sh_SCRIPT = $(install_sh) -c$/;"	m
+len	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  int len;$/;"	m	struct:__anon3
+libdir	/usr/local/src/netcat-0.7.1/src/Makefile	/^libdir = ${exec_prefix}\/lib$/;"	m
+libexecdir	/usr/local/src/netcat-0.7.1/src/Makefile	/^libexecdir = ${exec_prefix}\/libexec$/;"	m
+lifc_buf	/usr/local/src/netcat-0.7.1/src/udphelper.c	42;"	d	file:
+lifc_len	/usr/local/src/netcat-0.7.1/src/udphelper.c	41;"	d	file:
+lifc_req	/usr/local/src/netcat-0.7.1/src/udphelper.c	43;"	d	file:
+lifconf	/usr/local/src/netcat-0.7.1/src/udphelper.c	44;"	d	file:
+lifr_addr	/usr/local/src/netcat-0.7.1/src/udphelper.c	56;"	d	file:
+lifr_dstaddr	/usr/local/src/netcat-0.7.1/src/udphelper.c	58;"	d	file:
+lifr_flags	/usr/local/src/netcat-0.7.1/src/udphelper.c	59;"	d	file:
+lifr_name	/usr/local/src/netcat-0.7.1/src/udphelper.c	57;"	d	file:
+lifreq	/usr/local/src/netcat-0.7.1/src/udphelper.c	61;"	d	file:
+local_host	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  nc_host_t local_host, host;$/;"	m	struct:__anon6
+local_port	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  nc_port_t local_port, port;$/;"	m	struct:__anon6
+localedir	/usr/local/src/netcat-0.7.1/src/Makefile	/^localedir = $(datadir)\/locale$/;"	m
+localstatedir	/usr/local/src/netcat-0.7.1/src/Makefile	/^localstatedir = ${prefix}\/var$/;"	m
+main	/usr/local/src/netcat-0.7.1/src/netcat.c	/^int main(int argc, char *argv[])$/;"	f	signature:(int argc, char *argv[])
+mandir	/usr/local/src/netcat-0.7.1/src/Makefile	/^mandir = ${prefix}\/man$/;"	m
+mkinstalldirs	/usr/local/src/netcat-0.7.1/src/Makefile	/^mkinstalldirs = $(SHELL) $(top_srcdir)\/mkinstalldirs$/;"	m
+name	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  char name[MAXHOSTNAMELEN];			\/* dns name *\/$/;"	m	struct:__anon4
+name	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  char name[NETCAT_MAXPORTNAMELEN];	\/* canonical port name *\/$/;"	m	struct:__anon5
+nc_buffer_t	/usr/local/src/netcat-0.7.1/src/netcat.h	/^} nc_buffer_t;$/;"	t	typeref:struct:__anon3
+nc_host_t	/usr/local/src/netcat-0.7.1/src/netcat.h	/^} nc_host_t;$/;"	t	typeref:struct:__anon4
+nc_mode_t	/usr/local/src/netcat-0.7.1/src/netcat.h	/^} nc_mode_t;$/;"	t	typeref:enum:__anon1
+nc_port_t	/usr/local/src/netcat-0.7.1/src/netcat.h	/^} nc_port_t;$/;"	t	typeref:struct:__anon5
+nc_proto_t	/usr/local/src/netcat-0.7.1/src/netcat.h	/^} nc_proto_t;$/;"	t	typeref:enum:__anon2
+nc_sock_t	/usr/local/src/netcat-0.7.1/src/netcat.h	/^} nc_sock_t;$/;"	t	typeref:struct:__anon6
+ncexec	/usr/local/src/netcat-0.7.1/src/netcat.c	/^static void ncexec(nc_sock_t *ncsock)$/;"	f	file:	signature:(nc_sock_t *ncsock)
+ncprint	/usr/local/src/netcat-0.7.1/src/misc.c	/^void ncprint(int type, const char *fmt, ...)$/;"	f	signature:(int type, const char *fmt, ...)
+ncprint	/usr/local/src/netcat-0.7.1/src/proto.h	/^void ncprint(int type, const char *fmt, ...);$/;"	p	signature:(int type, const char *fmt, ...)
+netcat_DEPENDENCIES	/usr/local/src/netcat-0.7.1/src/Makefile	/^netcat_DEPENDENCIES =$/;"	m
+netcat_LDADD	/usr/local/src/netcat-0.7.1/src/Makefile	/^netcat_LDADD =  $/;"	m
+netcat_LDFLAGS	/usr/local/src/netcat-0.7.1/src/Makefile	/^netcat_LDFLAGS =$/;"	m
+netcat_OBJECTS	/usr/local/src/netcat-0.7.1/src/Makefile	/^netcat_OBJECTS = $(am_netcat_OBJECTS)$/;"	m
+netcat_SOURCES	/usr/local/src/netcat-0.7.1/src/Makefile	/^netcat_SOURCES = \\$/;"	m
+netcat_commandline_read	/usr/local/src/netcat-0.7.1/src/misc.c	/^void netcat_commandline_read(int *argc, char ***argv)$/;"	f	signature:(int *argc, char ***argv)
+netcat_commandline_read	/usr/local/src/netcat-0.7.1/src/proto.h	/^void netcat_commandline_read(int *argc, char ***argv);$/;"	p	signature:(int *argc, char ***argv)
+netcat_fhexdump	/usr/local/src/netcat-0.7.1/src/misc.c	/^int netcat_fhexdump(FILE *stream, char c, const void *data, size_t datalen)$/;"	f	signature:(FILE *stream, char c, const void *data, size_t datalen)
+netcat_fhexdump	/usr/local/src/netcat-0.7.1/src/proto.h	/^int netcat_fhexdump(FILE *stream, char c, const void *data, size_t datalen);$/;"	p	signature:(FILE *stream, char c, const void *data, size_t datalen)
+netcat_flag_count	/usr/local/src/netcat-0.7.1/src/flagset.c	/^int netcat_flag_count(void)$/;"	f	signature:(void)
+netcat_flag_count	/usr/local/src/netcat-0.7.1/src/proto.h	/^int netcat_flag_count(void);$/;"	p	signature:(void)
+netcat_flag_get	/usr/local/src/netcat-0.7.1/src/flagset.c	/^bool netcat_flag_get(unsigned short port)$/;"	f	signature:(unsigned short port)
+netcat_flag_get	/usr/local/src/netcat-0.7.1/src/proto.h	/^bool netcat_flag_get(unsigned short port);$/;"	p	signature:(unsigned short port)
+netcat_flag_init	/usr/local/src/netcat-0.7.1/src/flagset.c	/^bool netcat_flag_init(unsigned int len)$/;"	f	signature:(unsigned int len)
+netcat_flag_init	/usr/local/src/netcat-0.7.1/src/proto.h	/^bool netcat_flag_init(unsigned int len);$/;"	p	signature:(unsigned int len)
+netcat_flag_next	/usr/local/src/netcat-0.7.1/src/flagset.c	/^unsigned short netcat_flag_next(unsigned short port)$/;"	f	signature:(unsigned short port)
+netcat_flag_next	/usr/local/src/netcat-0.7.1/src/proto.h	/^unsigned short netcat_flag_next(unsigned short port);$/;"	p	signature:(unsigned short port)
+netcat_flag_rand	/usr/local/src/netcat-0.7.1/src/flagset.c	/^unsigned short netcat_flag_rand(void)$/;"	f	signature:(void)
+netcat_flag_rand	/usr/local/src/netcat-0.7.1/src/proto.h	/^unsigned short netcat_flag_rand(void);$/;"	p	signature:(void)
+netcat_flag_set	/usr/local/src/netcat-0.7.1/src/flagset.c	/^void netcat_flag_set(unsigned short port, bool flag)$/;"	f	signature:(unsigned short port, bool flag)
+netcat_flag_set	/usr/local/src/netcat-0.7.1/src/proto.h	/^void netcat_flag_set(unsigned short port, bool flag);$/;"	p	signature:(unsigned short port, bool flag)
+netcat_getport	/usr/local/src/netcat-0.7.1/src/network.c	/^bool netcat_getport(nc_port_t *dst, const char *port_string,$/;"	f	signature:(nc_port_t *dst, const char *port_string, unsigned short port_num)
+netcat_getport	/usr/local/src/netcat-0.7.1/src/proto.h	/^bool netcat_getport(nc_port_t *dst, const char *port_string,$/;"	p	signature:(nc_port_t *dst, const char *port_string, unsigned short port_num)
+netcat_inet_ntop	/usr/local/src/netcat-0.7.1/src/network.c	/^const char *netcat_inet_ntop(const void *src)$/;"	f	signature:(const void *src)
+netcat_inet_ntop	/usr/local/src/netcat-0.7.1/src/proto.h	/^const char *netcat_inet_ntop(const void *src);$/;"	p	signature:(const void *src)
+netcat_inet_pton	/usr/local/src/netcat-0.7.1/src/network.c	/^int netcat_inet_pton(const char *src, void *dst)$/;"	f	signature:(const char *src, void *dst)
+netcat_inet_pton	/usr/local/src/netcat-0.7.1/src/proto.h	/^int netcat_inet_pton(const char *src, void *dst);$/;"	p	signature:(const char *src, void *dst)
+netcat_mode	/usr/local/src/netcat-0.7.1/src/netcat.c	/^nc_mode_t netcat_mode = 0;	\/* Netcat working modality *\/$/;"	v
+netcat_mode	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern nc_mode_t netcat_mode;$/;"	x
+netcat_nc	/usr/local/src/netcat-0.7.1/src/Makefile	/^netcat_nc = $(DESTDIR)$(bindir)\/nc$/;"	m
+netcat_printhelp	/usr/local/src/netcat-0.7.1/src/misc.c	/^void netcat_printhelp(char *argv0)$/;"	f	signature:(char *argv0)
+netcat_printhelp	/usr/local/src/netcat-0.7.1/src/proto.h	/^void netcat_printhelp(char *argv0);$/;"	p	signature:(char *argv0)
+netcat_printstats	/usr/local/src/netcat-0.7.1/src/misc.c	/^void netcat_printstats(bool force)$/;"	f	signature:(bool force)
+netcat_printstats	/usr/local/src/netcat-0.7.1/src/proto.h	/^void netcat_printstats(bool force);$/;"	p	signature:(bool force)
+netcat_printversion	/usr/local/src/netcat-0.7.1/src/misc.c	/^void netcat_printversion(void)$/;"	f	signature:(void)
+netcat_printversion	/usr/local/src/netcat-0.7.1/src/proto.h	/^void netcat_printversion(void);$/;"	p	signature:(void)
+netcat_resolvehost	/usr/local/src/netcat-0.7.1/src/network.c	/^bool netcat_resolvehost(nc_host_t *dst, const char *name)$/;"	f	signature:(nc_host_t *dst, const char *name)
+netcat_resolvehost	/usr/local/src/netcat-0.7.1/src/proto.h	/^bool netcat_resolvehost(nc_host_t *dst, const char *name);$/;"	p	signature:(nc_host_t *dst, const char *name)
+netcat_snprintnum	/usr/local/src/netcat-0.7.1/src/misc.c	/^int netcat_snprintnum(char *str, size_t size, unsigned long number)$/;"	f	signature:(char *str, size_t size, unsigned long number)
+netcat_snprintnum	/usr/local/src/netcat-0.7.1/src/proto.h	/^int netcat_snprintnum(char *str, size_t size, unsigned long number);$/;"	p	signature:(char *str, size_t size, unsigned long number)
+netcat_socket_accept	/usr/local/src/netcat-0.7.1/src/network.c	/^int netcat_socket_accept(int s, int timeout)$/;"	f	signature:(int s, int timeout)
+netcat_socket_accept	/usr/local/src/netcat-0.7.1/src/proto.h	/^int netcat_socket_accept(int fd, int timeout);$/;"	p	signature:(int fd, int timeout)
+netcat_socket_new	/usr/local/src/netcat-0.7.1/src/network.c	/^int netcat_socket_new(int domain, int type)$/;"	f	signature:(int domain, int type)
+netcat_socket_new	/usr/local/src/netcat-0.7.1/src/proto.h	/^int netcat_socket_new(int domain, int type);$/;"	p	signature:(int domain, int type)
+netcat_socket_new_connect	/usr/local/src/netcat-0.7.1/src/network.c	/^int netcat_socket_new_connect(int domain, int type, const struct in_addr *addr,$/;"	f	signature:(int domain, int type, const struct in_addr *addr, in_port_t port, const struct in_addr *local_addr, in_port_t local_port)
+netcat_socket_new_connect	/usr/local/src/netcat-0.7.1/src/proto.h	/^int netcat_socket_new_connect(int domain, int type, const struct in_addr *addr,$/;"	p	signature:(int domain, int type, const struct in_addr *addr, in_port_t port, const struct in_addr *local_addr, in_port_t local_port)
+netcat_socket_new_listen	/usr/local/src/netcat-0.7.1/src/network.c	/^int netcat_socket_new_listen(int domain, const struct in_addr *addr,$/;"	f	signature:(int domain, const struct in_addr *addr, in_port_t port)
+netcat_socket_new_listen	/usr/local/src/netcat-0.7.1/src/proto.h	/^int netcat_socket_new_listen(int domain, const struct in_addr *addr,$/;"	p	signature:(int domain, const struct in_addr *addr, in_port_t port)
+netcat_strid	/usr/local/src/netcat-0.7.1/src/network.c	/^const char *netcat_strid(const nc_host_t *host, const nc_port_t *port)$/;"	f	signature:(const nc_host_t *host, const nc_port_t *port)
+netcat_strid	/usr/local/src/netcat-0.7.1/src/proto.h	/^const char *netcat_strid(const nc_host_t *host, const nc_port_t *port);$/;"	p	signature:(const nc_host_t *host, const nc_port_t *port)
+netcat_string_split	/usr/local/src/netcat-0.7.1/src/misc.c	/^char *netcat_string_split(char **buf)$/;"	f	signature:(char **buf)
+netcat_string_split	/usr/local/src/netcat-0.7.1/src/proto.h	/^char *netcat_string_split(char **buf);$/;"	p	signature:(char **buf)
+netcat_telnet_parse	/usr/local/src/netcat-0.7.1/src/proto.h	/^void netcat_telnet_parse(nc_sock_t *ncsock);$/;"	p	signature:(nc_sock_t *ncsock)
+netcat_telnet_parse	/usr/local/src/netcat-0.7.1/src/telnet.c	/^void netcat_telnet_parse(nc_sock_t *ncsock)$/;"	f	signature:(nc_sock_t *ncsock)
+netnum	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  in_port_t netnum;			\/* port number in network byte order *\/$/;"	m	struct:__anon5
+num	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  unsigned short num;			\/* port number *\/$/;"	m	struct:__anon5
+oldincludedir	/usr/local/src/netcat-0.7.1/src/Makefile	/^oldincludedir = \/usr\/include$/;"	m
+opt_debug	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool opt_debug = FALSE;		\/* debugging output *\/$/;"	v
+opt_debug	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern bool opt_eofclose, opt_debug, opt_numeric, opt_random, opt_hexdump,$/;"	x
+opt_eofclose	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool opt_eofclose = FALSE;	\/* close connection on EOF from stdin *\/$/;"	v
+opt_eofclose	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern bool opt_eofclose, opt_debug, opt_numeric, opt_random, opt_hexdump,$/;"	x
+opt_exec	/usr/local/src/netcat-0.7.1/src/netcat.c	/^char *opt_exec = NULL;		\/* program to exec after connecting *\/$/;"	v
+opt_hexdump	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool opt_hexdump = FALSE;	\/* hexdump traffic *\/$/;"	v
+opt_hexdump	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern bool opt_eofclose, opt_debug, opt_numeric, opt_random, opt_hexdump,$/;"	x
+opt_interval	/usr/local/src/netcat-0.7.1/src/netcat.c	/^int opt_interval = 0;		\/* delay (in seconds) between lines\/ports *\/$/;"	v
+opt_interval	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern int opt_interval, opt_verbose, opt_wait;$/;"	x
+opt_numeric	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool opt_numeric = FALSE;	\/* don't resolve hostnames *\/$/;"	v
+opt_numeric	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern bool opt_eofclose, opt_debug, opt_numeric, opt_random, opt_hexdump,$/;"	x
+opt_outputfile	/usr/local/src/netcat-0.7.1/src/netcat.c	/^char *opt_outputfile = NULL;	\/* hexdump output file *\/$/;"	v
+opt_outputfile	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern char *opt_outputfile;$/;"	x
+opt_proto	/usr/local/src/netcat-0.7.1/src/netcat.c	/^nc_proto_t opt_proto = NETCAT_PROTO_TCP; \/* protocol to use for connections *\/$/;"	v
+opt_proto	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern nc_proto_t opt_proto;$/;"	x
+opt_random	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool opt_random = FALSE;	\/* use random ports *\/$/;"	v
+opt_random	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern bool opt_eofclose, opt_debug, opt_numeric, opt_random, opt_hexdump,$/;"	x
+opt_telnet	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool opt_telnet = FALSE;	\/* answer in telnet mode *\/$/;"	v
+opt_telnet	/usr/local/src/netcat-0.7.1/src/proto.h	/^	opt_telnet, opt_zero;$/;"	x
+opt_udpmode	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool opt_udpmode = FALSE;	\/* use udp protocol instead of tcp *\/$/;"	v
+opt_verbose	/usr/local/src/netcat-0.7.1/src/netcat.c	/^int opt_verbose = 0;		\/* be verbose (> 1 to be MORE verbose) *\/$/;"	v
+opt_verbose	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern int opt_interval, opt_verbose, opt_wait;$/;"	x
+opt_wait	/usr/local/src/netcat-0.7.1/src/netcat.c	/^int opt_wait = 0;		\/* wait time *\/$/;"	v
+opt_wait	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern int opt_interval, opt_verbose, opt_wait;$/;"	x
+opt_zero	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool opt_zero = FALSE;		\/* zero I\/O mode (don't expect anything) *\/$/;"	v
+opt_zero	/usr/local/src/netcat-0.7.1/src/proto.h	/^	opt_telnet, opt_zero;$/;"	x
+output_fp	/usr/local/src/netcat-0.7.1/src/netcat.c	/^FILE *output_fp = NULL;		\/* output fd (FIXME: i don't like this) *\/$/;"	v
+output_fp	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern FILE *output_fp;$/;"	x
+pkgdatadir	/usr/local/src/netcat-0.7.1/src/Makefile	/^pkgdatadir = $(datadir)\/netcat$/;"	m
+pkgincludedir	/usr/local/src/netcat-0.7.1/src/Makefile	/^pkgincludedir = $(includedir)\/netcat$/;"	m
+pkglibdir	/usr/local/src/netcat-0.7.1/src/Makefile	/^pkglibdir = $(libdir)\/netcat$/;"	m
+port	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  nc_port_t local_port, port;$/;"	m	struct:__anon6
+pos	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  unsigned char *pos;$/;"	m	struct:__anon3
+prefix	/usr/local/src/netcat-0.7.1/src/Makefile	/^prefix = \/usr\/local$/;"	m
+program_transform_name	/usr/local/src/netcat-0.7.1/src/Makefile	/^program_transform_name = s,x,x,$/;"	m
+proto	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  nc_proto_t proto;$/;"	m	struct:__anon6
+recvq	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  nc_buffer_t sendq, recvq;$/;"	m	struct:__anon6
+sbindir	/usr/local/src/netcat-0.7.1/src/Makefile	/^sbindir = ${exec_prefix}\/sbin$/;"	m
+sendq	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  nc_buffer_t sendq, recvq;$/;"	m	struct:__anon6
+sharedstatedir	/usr/local/src/netcat-0.7.1/src/Makefile	/^sharedstatedir = ${prefix}\/com$/;"	m
+signal_handler	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool signal_handler = TRUE;	\/* handle the signals externally *\/$/;"	v
+signal_handler	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern bool use_stdin, signal_handler, got_sigterm, got_sigint, got_sigusr1,$/;"	x
+srcdir	/usr/local/src/netcat-0.7.1/src/Makefile	/^srcdir = .$/;"	m
+ss_family	/usr/local/src/netcat-0.7.1/src/udphelper.c	60;"	d	file:
+subdir	/usr/local/src/netcat-0.7.1/src/Makefile	/^subdir = src$/;"	m
+sysconfdir	/usr/local/src/netcat-0.7.1/src/Makefile	/^sysconfdir = ${prefix}\/etc$/;"	m
+target	/usr/local/src/netcat-0.7.1/src/Makefile	/^target = i686-pc-linux-gnu$/;"	m
+target_alias	/usr/local/src/netcat-0.7.1/src/Makefile	/^target_alias = $/;"	m
+target_cpu	/usr/local/src/netcat-0.7.1/src/Makefile	/^target_cpu = i686$/;"	m
+target_os	/usr/local/src/netcat-0.7.1/src/Makefile	/^target_os = linux-gnu$/;"	m
+target_triplet	/usr/local/src/netcat-0.7.1/src/Makefile	/^target_triplet = i686-pc-linux-gnu$/;"	m
+target_vendor	/usr/local/src/netcat-0.7.1/src/Makefile	/^target_vendor = pc$/;"	m
+textdomain	/usr/local/src/netcat-0.7.1/src/intl.h	47;"	d
+timeout	/usr/local/src/netcat-0.7.1/src/netcat.h	/^  int fd, domain, timeout;$/;"	m	struct:__anon6
+top_builddir	/usr/local/src/netcat-0.7.1/src/Makefile	/^top_builddir = ..$/;"	m
+top_distdir	/usr/local/src/netcat-0.7.1/src/Makefile	/^top_distdir = ..$/;"	m
+top_srcdir	/usr/local/src/netcat-0.7.1/src/Makefile	/^top_srcdir = ..$/;"	m
+transform	/usr/local/src/netcat-0.7.1/src/Makefile	/^transform = $(program_transform_name)$/;"	m
+udphelper_ancillary_read	/usr/local/src/netcat-0.7.1/src/proto.h	/^int udphelper_ancillary_read(struct msghdr *my_hdr,$/;"	p	signature:(struct msghdr *my_hdr, struct sockaddr_in *get_addr)
+udphelper_ancillary_read	/usr/local/src/netcat-0.7.1/src/udphelper.c	/^int udphelper_ancillary_read(struct msghdr *my_hdr,$/;"	f	signature:(struct msghdr *my_hdr, struct sockaddr_in *get_addr)
+udphelper_sockets_close	/usr/local/src/netcat-0.7.1/src/proto.h	/^void udphelper_sockets_close(int *sockbuf);$/;"	p	signature:(int *sockbuf)
+udphelper_sockets_close	/usr/local/src/netcat-0.7.1/src/udphelper.c	/^void udphelper_sockets_close(int *sockbuf)$/;"	f	signature:(int *sockbuf)
+udphelper_sockets_open	/usr/local/src/netcat-0.7.1/src/proto.h	/^int udphelper_sockets_open(int **sockbuf, in_port_t nport);$/;"	p	signature:(int **sockbuf, in_port_t nport)
+udphelper_sockets_open	/usr/local/src/netcat-0.7.1/src/udphelper.c	/^int udphelper_sockets_open(int **sockbuf, in_port_t nport)$/;"	f	signature:(int **sockbuf, in_port_t nport)
+update_timeval	/usr/local/src/netcat-0.7.1/src/misc.c	/^void update_timeval(struct timeval *target)$/;"	f	signature:(struct timeval *target)
+update_timeval	/usr/local/src/netcat-0.7.1/src/proto.h	/^void update_timeval(struct timeval *target);$/;"	p	signature:(struct timeval *target)
+use_stdin	/usr/local/src/netcat-0.7.1/src/netcat.c	/^bool use_stdin = TRUE;		\/* tells wether stdin was closed or not *\/$/;"	v
+use_stdin	/usr/local/src/netcat-0.7.1/src/proto.h	/^extern bool use_stdin, signal_handler, got_sigterm, got_sigint, got_sigusr1,$/;"	x
