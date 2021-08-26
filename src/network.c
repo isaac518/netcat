@@ -444,7 +444,8 @@ int netcat_socket_new_connect(int domain, int type, const struct in_addr *addr,
      call will return -1 in MOST cases (on some systems, a connect() to a local
      address may immediately return successfully) */
   ret = connect(sock, (struct sockaddr *)&rem_addr, sizeof(rem_addr));
-  if ((ret < 0) && (errno != EINPROGRESS)) {
+  debug_dv(("connect(addr=%p, port=%hu) returns %d, errno %d: %s", (void *)addr, ntohs(port), ret, errno, strerror(errno)));
+  if ((ret < 0) && (errno != EINPROGRESS)) { ///always in progress(errno==115), so return sock. 
     ret = -5;
     goto err;
   }

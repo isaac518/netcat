@@ -27,6 +27,7 @@ hostinfo               = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
+PATH: /root/.cargo/bin
 PATH: /usr/local/sbin
 PATH: /usr/local/bin
 PATH: /sbin
@@ -1521,15 +1522,15 @@ jm_ac_cv_header_stdint_h=yes
 ## Output variables. ##
 ## ----------------- ##
 
-ACLOCAL='${SHELL} /root/src/netcat-0.7.2/missing --run aclocal-1.7'
+ACLOCAL='${SHELL} /root/src/netcat-0.7.1/missing --run aclocal-1.7'
 ALLOCA=''
 AMDEPBACKSLASH='\'
 AMDEP_FALSE='#'
 AMDEP_TRUE=''
-AMTAR='${SHELL} /root/src/netcat-0.7.2/missing --run tar'
-AUTOCONF='${SHELL} /root/src/netcat-0.7.2/missing --run autoconf'
-AUTOHEADER='${SHELL} /root/src/netcat-0.7.2/missing --run autoheader'
-AUTOMAKE='${SHELL} /root/src/netcat-0.7.2/missing --run automake-1.7'
+AMTAR='${SHELL} /root/src/netcat-0.7.1/missing --run tar'
+AUTOCONF='${SHELL} /root/src/netcat-0.7.1/missing --run autoconf'
+AUTOHEADER='${SHELL} /root/src/netcat-0.7.1/missing --run autoheader'
+AUTOMAKE='${SHELL} /root/src/netcat-0.7.1/missing --run automake-1.7'
 AWK='gawk'
 CC='gcc'
 CCDEPMODE='depmode=none'
@@ -1561,7 +1562,7 @@ LIBS=''
 LTLIBICONV=''
 LTLIBINTL=''
 LTLIBOBJS=''
-MAKEINFO='${SHELL} /root/src/netcat-0.7.2/missing --run makeinfo'
+MAKEINFO='${SHELL} /root/src/netcat-0.7.1/missing --run makeinfo'
 MKINSTALLDIRS='./mkinstalldirs'
 MSGFMT='/usr/bin/msgfmt'
 MSGMERGE='/usr/bin/msgmerge'
@@ -1610,7 +1611,7 @@ host_os='linux-gnu'
 host_vendor='pc'
 includedir='${prefix}/include'
 infodir='${prefix}/info'
-install_sh='/root/src/netcat-0.7.2/install-sh'
+install_sh='/root/src/netcat-0.7.1/install-sh'
 libdir='${exec_prefix}/lib'
 libexecdir='${exec_prefix}/libexec'
 localstatedir='${prefix}/var'

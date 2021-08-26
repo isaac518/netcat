@@ -516,13 +516,13 @@ s,@INSTALL_DATA@,${INSTALL} -m 644,;t t
 s,@CYGPATH_W@,echo,;t t
 s,@PACKAGE@,netcat,;t t
 s,@VERSION@,0.7.2,;t t
-s,@ACLOCAL@,${SHELL} /root/src/netcat-0.7.2/missing --run aclocal-1.7,;t t
-s,@AUTOCONF@,${SHELL} /root/src/netcat-0.7.2/missing --run autoconf,;t t
-s,@AUTOMAKE@,${SHELL} /root/src/netcat-0.7.2/missing --run automake-1.7,;t t
-s,@AUTOHEADER@,${SHELL} /root/src/netcat-0.7.2/missing --run autoheader,;t t
-s,@MAKEINFO@,${SHELL} /root/src/netcat-0.7.2/missing --run makeinfo,;t t
-s,@AMTAR@,${SHELL} /root/src/netcat-0.7.2/missing --run tar,;t t
-s,@install_sh@,/root/src/netcat-0.7.2/install-sh,;t t
+s,@ACLOCAL@,${SHELL} /root/src/netcat-0.7.1/missing --run aclocal-1.7,;t t
+s,@AUTOCONF@,${SHELL} /root/src/netcat-0.7.1/missing --run autoconf,;t t
+s,@AUTOMAKE@,${SHELL} /root/src/netcat-0.7.1/missing --run automake-1.7,;t t
+s,@AUTOHEADER@,${SHELL} /root/src/netcat-0.7.1/missing --run autoheader,;t t
+s,@MAKEINFO@,${SHELL} /root/src/netcat-0.7.1/missing --run makeinfo,;t t
+s,@AMTAR@,${SHELL} /root/src/netcat-0.7.1/missing --run tar,;t t
+s,@install_sh@,/root/src/netcat-0.7.1/install-sh,;t t
 s,@STRIP@,,;t t
 s,@ac_ct_STRIP@,,;t t
 s,@INSTALL_STRIP_PROGRAM@,${SHELL} $(install_sh) -c -s,;t t

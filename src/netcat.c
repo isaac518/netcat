@@ -219,10 +219,11 @@ int main(int argc, char *argv[])
 	{ "wait",	required_argument,	NULL, 'w' },
 	{ "zero",	no_argument,		NULL, 'z' },
     { "bridge", required_argument, NULL, 'B'},
+    //{ "station", required_argument, NULL, 'S'},
 	{ 0, 0, 0, 0 }
     };
 
-    c = getopt_long(argc, argv, "Bcde:g:G:hi:lL:no:p:P:rs:S:tTuvVxw:z",
+    c = getopt_long(argc, argv, "B:cde:g:G:hi:lL:no:p:P:rs:S:tTuvVxw:z",
 		    long_options, &option_index);
     if (c == -1)
       break;
@@ -235,6 +236,8 @@ int main(int argc, char *argv[])
       if (opt_zero)
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
 		_("`-B' and `-z' options are incompatible"));
+
+	debug_dv(("optarg:  %s", optarg));
       do {
 
 	char *div = strchr(optarg, ':');
@@ -605,7 +608,7 @@ int main(int argc, char *argv[])
     connect_ret = core_connect(&connect_sock);
 
     /* connection failure? (we cannot get this in UDP mode) */
-    if (connect_ret < 0) {
+    if (netcat_mode == NETCAT_CONNECT && connect_ret < 0) {
       int ncprint_flags = NCPRINT_VERB1;
       assert(connect_sock.proto != NETCAT_PROTO_UDP);
 
@@ -629,6 +632,14 @@ int main(int argc, char *argv[])
            initialized by the command line arguments. */
         
 	    assert(opt_proto != NETCAT_PROTO_UDP); ///not sure if available with udp
+        while(connect_ret < 0){
+            int ncprint_flags = NCPRINT_VERB1;
+            ncprint(ncprint_flags, "%s: %s",
+                    netcat_strid(&connect_sock.host, &connect_sock.port),
+                    strerror(errno));
+            usleep(500);
+            connect_ret = core_connect(&connect_sock);
+        }
 
         connect_ret = core_connect(&connect_bridge_sock);
         /* connection failure? (we cannot get this in UDP mode) */
