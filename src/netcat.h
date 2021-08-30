@@ -140,7 +140,8 @@ typedef enum {
   NETCAT_CONNECT,
   NETCAT_LISTEN,
   NETCAT_TUNNEL,
-  NETCAT_BRIDGE
+  NETCAT_STATION,
+  NETCAT_BRIDGE,
 } nc_mode_t;
 
 /* Recognized protocols */

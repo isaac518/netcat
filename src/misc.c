@@ -311,6 +311,7 @@ void netcat_printhelp(char *argv0)
   printf("\n");
   printf(_("Mandatory arguments to long options are mandatory for short options too.\n"));
   printf(_("Options:\n"
+"  -A, --station              listen until connect comes, start listen:PORT+1, exchange data between 2 sports\n" 
 "  -B, --bridge=ADDRESS:PORT  connect to somewhere, forward local port to remote address (udp deprecated !)\n"
 "  -c, --close                close connection on EOF from stdin\n"
 "  -d, --debug                debug message\n"
@@ -326,7 +327,8 @@ void netcat_printhelp(char *argv0)
 "  -o, --output=FILE          output hexdump traffic to FILE (implies -x)\n"
 "  -p, --local-port=NUM       local port number\n"
 "  -r, --randomize            randomize local and remote ports\n"
-"  -s, --source=ADDRESS       local source address (ip or hostname)\n"));
+"  -s, --source=ADDRESS       local source address (ip or hostname)\n"
+"  -S, --tunnel-source=ADDRESS  local source address (in tunnel mode)\n"));
 #ifndef USE_OLD_COMPAT
   printf(_(""
 "  -t, --tcp                  TCP mode (default)\n"

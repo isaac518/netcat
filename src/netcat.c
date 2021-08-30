@@ -107,6 +107,51 @@ static void ncexec(nc_sock_t *ncsock)
   char *p;
   assert(ncsock && (ncsock->fd >= 0));
 
+  /* change the label for the executed program */
+  if ((p = strrchr(opt_exec, '/')))
+    p++;			/* shorter argv[0] */
+  else
+    p = opt_exec;
+
+  /* support arguments of the exec program(cannot completed, args would be destroyed when exec()). 
+   * remain bug that any arg has '/'  */
+#define MAX_EXEC_ARGC 20
+  char *exec_name;
+  char *exec_argv[MAX_EXEC_ARGC]; ///allocated conveniently, maybe not enough :)
+  int   exec_argc=0;
+  memset(exec_argv,0,sizeof(exec_argv));
+  debug_dv(("sizeof(exec_argv)=%d", sizeof(exec_argv)));
+
+  exec_name=p;
+  exec_argv[0]=exec_name;
+  while(*p) {
+    if(*p == ' ' || *p == '\t') {
+        *p = '\0';
+        p++;
+        if(*p && *p != ' ' && *p != '\t') {
+            exec_argc++;
+            exec_argv[exec_argc]=p;
+            assert( exec_argc <= MAX_EXEC_ARGC );
+        }
+    }
+    p++;
+  }
+  debug_dv(("opt_exec=%s, argv[0]=%s, argv[1]=%s, argv[2]=%s",opt_exec, exec_argv[0], exec_argv[1], exec_argv[2]));
+  
+  //use *environ but not works
+  int i;
+  char a[3];
+  for (i=1;exec_argv[i];i++) {
+    memset(a,0,sizeof(a));
+    sprintf(a,"a%d",i);
+    if(setenv(a,exec_argv[i],1))
+        ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("setenv( %s, %s, 1) error: %s"),
+            a, exec_argv[i], strerror(errno));
+    exec_argv[i]=getenv(a);
+  }
+
+  if(fork()!=0)return;
+
   /* save the stderr fd because we may need it later */
   saved_stderr = dup(STDERR_FILENO);
 
@@ -116,17 +161,15 @@ static void ncexec(nc_sock_t *ncsock)
   dup2(STDIN_FILENO, STDOUT_FILENO);	/* swiped directly out of "inetd". */
   dup2(STDIN_FILENO, STDERR_FILENO);	/* also duplicate the stderr channel */
 
-  /* change the label for the executed program */
-  if ((p = strrchr(opt_exec, '/')))
-    p++;			/* shorter argv[0] */
-  else
-    p = opt_exec;
-
   /* replace this process with the new one */
 #ifndef USE_OLD_COMPAT
   execl("/bin/sh", p, "-c", opt_exec, NULL);
-#else
-  execl(opt_exec, p, NULL);
+  ///execl("/bin/sh", exec_name, "-c", opt_exec, NULL); 
+#else  ///default mode except --enable-compat
+  ///execl(opt_exec, p, NULL);
+  execv(opt_exec, exec_argv);
+  //execl(opt_exec,exec_name,exec_argv[1],NULL);
+  ///execl("/bin/sh", "-c", opt_exec, NULL);
 #endif
   dup2(saved_stderr, STDERR_FILENO);
   ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("Couldn't execute %s: %s"),
@@ -219,16 +262,22 @@ int main(int argc, char *argv[])
 	{ "wait",	required_argument,	NULL, 'w' },
 	{ "zero",	no_argument,		NULL, 'z' },
     { "bridge", required_argument, NULL, 'B'},
-    //{ "station", required_argument, NULL, 'S'},
+    { "station", required_argument, NULL, 'A'},
 	{ 0, 0, 0, 0 }
     };
 
-    c = getopt_long(argc, argv, "B:cde:g:G:hi:lL:no:p:P:rs:S:tTuvVxw:z",
+    c = getopt_long(argc, argv, "AB:cde:g:G:hi:lL:no:p:P:rs:S:tTuvVxw:z",
 		    long_options, &option_index);
     if (c == -1)
       break;
 
     switch (c) {
+    case 'A':
+      if (netcat_mode != NETCAT_UNSPEC)
+	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
+		_("You can specify mode flags (`-A', `-B', `-l' and `-L') only once"));
+      netcat_mode = NETCAT_STATION;
+      break;
     case 'B':			/* mode flag: bridge mode */
       if (netcat_mode != NETCAT_UNSPEC)
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
@@ -493,7 +542,10 @@ int main(int argc, char *argv[])
   }
   exit(0);
 #endif
-
+    
+    if (netcat_mode == NETCAT_STATION)
+        if (local_port.num==0)
+      ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("No local port specified. "));
   /* Handle listen mode and tunnel mode (whose index number is higher) */
   if (netcat_mode > NETCAT_CONNECT && netcat_mode < NETCAT_BRIDGE) {
     /* in tunnel mode the opt_zero flag is illegal, while on listen mode it
@@ -525,6 +577,30 @@ int main(int argc, char *argv[])
 
       ncprint(NCPRINT_VERB1 | NCPRINT_EXIT, _("Listen mode failed: %s"),
 	      strerror(errno));
+    }
+
+     /* in station mode, listen on double ports, exchange data */
+    if (netcat_mode == NETCAT_STATION) {
+        opt_eofclose = TRUE; ///force eof to exit
+        nc_sock_t listen_sock2=listen_sock;
+        //listen_sock2.local_port=listen_sock.local_port+1;
+        char tempport[8];
+        sprintf(tempport,"%u", local_port.num+1);
+        if (!netcat_getport(&listen_sock2.local_port, tempport, 0))
+      ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("Invalid local port2: %s"),
+            tempport);
+        accept_ret = core_listen(&listen_sock2);
+        if (accept_ret < 0) {
+          if (opt_zero && (errno == ETIMEDOUT))
+            exit(0);
+      ncprint(NCPRINT_VERB1 | NCPRINT_EXIT, _("Second listen failed: %s"),
+            strerror(errno));
+        }
+        core_readwrite(&listen_sock, &listen_sock2);
+        debug_dv(("Listen: EXIT"));
+        /* all jobs should be ok, go to the cleanup */
+        goto main_exit;
+        
     }
 
     /* if we are in listen mode, run the core loop and exit when it returns.
