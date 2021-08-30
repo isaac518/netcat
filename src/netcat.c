@@ -104,17 +104,21 @@ static void got_usr1(int z)
 static void ncexec(nc_sock_t *ncsock)
 {
   int saved_stderr;
-  char *p;
+  char *p,*q;
+  char *command=strdup(opt_exec); ///save the original command string.
   assert(ncsock && (ncsock->fd >= 0));
 
   /* change the label for the executed program */
+  if ((q=strchr(opt_exec, ' '))||(q=strchr(opt_exec, '\t'))) ///if args has a '/'
+      *q='\0';
   if ((p = strrchr(opt_exec, '/')))
     p++;			/* shorter argv[0] */
   else
     p = opt_exec;
+  if(q)
+      *q=' ';
 
-  /* support arguments of the exec program(cannot completed, args would be destroyed when exec()). 
-   * remain bug that any arg has '/'  */
+  /* support arguments of the exec program. */
 #define MAX_EXEC_ARGC 20
   char *exec_name;
   char *exec_argv[MAX_EXEC_ARGC]; ///allocated conveniently, maybe not enough :)
@@ -129,8 +133,7 @@ static void ncexec(nc_sock_t *ncsock)
         *p = '\0';
         p++;
         if(*p && *p != ' ' && *p != '\t') {
-            exec_argc++;
-            exec_argv[exec_argc]=p;
+            exec_argv[++exec_argc]=p;
             assert( exec_argc <= MAX_EXEC_ARGC );
         }
     }
@@ -138,19 +141,7 @@ static void ncexec(nc_sock_t *ncsock)
   }
   debug_dv(("opt_exec=%s, argv[0]=%s, argv[1]=%s, argv[2]=%s",opt_exec, exec_argv[0], exec_argv[1], exec_argv[2]));
   
-  //use *environ but not works
-  int i;
-  char a[3];
-  for (i=1;exec_argv[i];i++) {
-    memset(a,0,sizeof(a));
-    sprintf(a,"a%d",i);
-    if(setenv(a,exec_argv[i],1))
-        ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("setenv( %s, %s, 1) error: %s"),
-            a, exec_argv[i], strerror(errno));
-    exec_argv[i]=getenv(a);
-  }
-
-  if(fork()!=0)return;
+  exec_argv[exec_argc+1]=NULL;
 
   /* save the stderr fd because we may need it later */
   saved_stderr = dup(STDERR_FILENO);
@@ -162,14 +153,16 @@ static void ncexec(nc_sock_t *ncsock)
   dup2(STDIN_FILENO, STDERR_FILENO);	/* also duplicate the stderr channel */
 
   /* replace this process with the new one */
-#ifndef USE_OLD_COMPAT
-  execl("/bin/sh", p, "-c", opt_exec, NULL);
-  ///execl("/bin/sh", exec_name, "-c", opt_exec, NULL); 
-#else  ///default mode except --enable-compat
-  ///execl(opt_exec, p, NULL);
-  execv(opt_exec, exec_argv);
-  //execl(opt_exec,exec_name,exec_argv[1],NULL);
-  ///execl("/bin/sh", "-c", opt_exec, NULL);
+#ifndef USE_OLD_COMPAT  ///default method except --enable-compat
+  debug_dv(("Not use old compatitiviy\n"));
+  ///ncexec_argv[2]=ncexec_argv[1];
+  ///ncexec_argv[1]="-c";
+  ///debug_dv(("opt_exec=%s, argc=%d, argv[0]=%s, argv[1]=%s, argv[2]=%s",opt_exec, ncexec_argc, ncexec_argv[0], ncexec_argv[1], ncexec_argv[2]));
+  //execl("/bin/sh", p, "-c", opt_exec, NULL);
+  execl("/bin/sh", exec_name, "-c", command);
+#else  
+  //execl(opt_exec,p,NULL);
+  execv(opt_exec, exec_argv); 
 #endif
   dup2(saved_stderr, STDERR_FILENO);
   ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("Couldn't execute %s: %s"),
@@ -262,7 +255,7 @@ int main(int argc, char *argv[])
 	{ "wait",	required_argument,	NULL, 'w' },
 	{ "zero",	no_argument,		NULL, 'z' },
     { "bridge", required_argument, NULL, 'B'},
-    { "station", required_argument, NULL, 'A'},
+    { "switch", required_argument, NULL, 'A'},
 	{ 0, 0, 0, 0 }
     };
 
@@ -272,11 +265,11 @@ int main(int argc, char *argv[])
       break;
 
     switch (c) {
-    case 'A':
+    case 'A':           /* mode flag: switch mode */
       if (netcat_mode != NETCAT_UNSPEC)
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
 		_("You can specify mode flags (`-A', `-B', `-l' and `-L') only once"));
-      netcat_mode = NETCAT_STATION;
+      netcat_mode = NETCAT_SWITCH;
       break;
     case 'B':			/* mode flag: bridge mode */
       if (netcat_mode != NETCAT_UNSPEC)
@@ -543,7 +536,7 @@ int main(int argc, char *argv[])
   exit(0);
 #endif
     
-    if (netcat_mode == NETCAT_STATION)
+    if (netcat_mode == NETCAT_SWITCH) ///need local port specified
         if (local_port.num==0)
       ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("No local port specified. "));
   /* Handle listen mode and tunnel mode (whose index number is higher) */
@@ -579,8 +572,8 @@ int main(int argc, char *argv[])
 	      strerror(errno));
     }
 
-     /* in station mode, listen on double ports, exchange data */
-    if (netcat_mode == NETCAT_STATION) {
+     /* in switch mode, listen on double ports, exchange data */
+    if (netcat_mode == NETCAT_SWITCH) {
         opt_eofclose = TRUE; ///force eof to exit
         nc_sock_t listen_sock2=listen_sock;
         //listen_sock2.local_port=listen_sock.local_port+1;

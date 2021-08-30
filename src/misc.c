@@ -311,7 +311,7 @@ void netcat_printhelp(char *argv0)
   printf("\n");
   printf(_("Mandatory arguments to long options are mandatory for short options too.\n"));
   printf(_("Options:\n"
-"  -A, --station              listen until connect comes, start listen:PORT+1, exchange data between 2 sports\n" 
+"  -A, --switch               listen until connect comes, start listen:PORT+1, exchange data between 2 ports\n" 
 "  -B, --bridge=ADDRESS:PORT  connect to somewhere, forward local port to remote address (udp deprecated !)\n"
 "  -c, --close                close connection on EOF from stdin\n"
 "  -d, --debug                debug message\n"
