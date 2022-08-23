@@ -28,6 +28,7 @@ hostinfo               = unknown
 /bin/universe          = unknown
 
 PATH: /root/.cargo/bin
+PATH: /usr/local/gcc-5.5.0/bin
 PATH: /usr/local/sbin
 PATH: /usr/local/bin
 PATH: /sbin
@@ -58,25 +59,29 @@ configure:1611: result: gawk
 configure:1621: checking whether make sets $(MAKE)
 configure:1641: result: yes
 configure:1856: checking for gcc
-configure:1872: found /usr/bin/gcc
+configure:1872: found /usr/local/gcc-5.5.0/bin/gcc
 configure:1882: result: gcc
 configure:2126: checking for C compiler version
 configure:2129: gcc --version </dev/null >&5
-gcc (GCC) 4.4.7 20120313 (Red Hat 4.4.7-23)
-Copyright (C) 2010 Free Software Foundation, Inc.
+gcc (GCC) 5.5.0
+Copyright (C) 2015 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 configure:2132: $? = 0
 configure:2134: gcc -v </dev/null >&5
 Using built-in specs.
-Target: i686-redhat-linux
-Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-languages=c,c++,objc,obj-c++,java,fortran,ada --enable-java-awt=gtk --disable-dssi --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-1.5.0.0/jre --enable-libgcj-multifile --enable-java-maintainer-mode --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --disable-libjava-multilib --with-ppl --with-cloog --with-tune=generic --with-arch=i686 --build=i686-redhat-linux
+COLLECT_GCC=gcc
+COLLECT_LTO_WRAPPER=/usr/local/gcc-5.5.0/libexec/gcc/i686-pc-linux-gnu/5.5.0/lto-wrapper
+Target: i686-pc-linux-gnu
+Configured with: /usr/local/src/gcc-5.5.0/configure --prefix=/usr/local/gcc-5.5.0 --enable-threads=posix --disable-checking --disable-multilib --enable-languages=c,c++
 Thread model: posix
-gcc version 4.4.7 20120313 (Red Hat 4.4.7-23) (GCC) 
+gcc version 5.5.0 (GCC) 
 configure:2137: $? = 0
 configure:2139: gcc -V </dev/null >&5
-gcc: '-V' option must have argument
+gcc: error: unrecognized command line option '-V'
+gcc: fatal error: no input files
+compilation terminated.
 configure:2142: $? = 1
 configure:2165: checking for C compiler default output file name
 configure:2168: gcc    conftest.c  >&5
@@ -124,7 +129,10 @@ configure:2562: test -s conftest.o
 configure:2565: $? = 0
 configure:2583: result: none needed
 configure:2601: gcc -c -g -O2  conftest.c >&5
-conftest.c:2: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'me'
+conftest.c:2:3: error: unknown type name 'choke'
+   choke me
+   ^
+conftest.c:2:3: error: expected '=', ',', ';', 'asm' or '__attribute__' at end of input
 configure:2607: $? = 1
 configure: failed program was:
 | #ifndef __cplusplus
@@ -138,7 +146,8 @@ configure:2912: checking how to run the C preprocessor
 configure:2947: gcc -E  conftest.c
 configure:2953: $? = 0
 configure:2985: gcc -E  conftest.c
-conftest.c:11:28: error: ac_nonexistent.h: No such file or directory
+conftest.c:11:28: fatal error: ac_nonexistent.h: No such file or directory
+compilation terminated.
 configure:2991: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -156,7 +165,8 @@ configure:3030: result: gcc -E
 configure:3054: gcc -E  conftest.c
 configure:3060: $? = 0
 configure:3092: gcc -E  conftest.c
-conftest.c:11:28: error: ac_nonexistent.h: No such file or directory
+conftest.c:11:28: fatal error: ac_nonexistent.h: No such file or directory
+compilation terminated.
 configure:3098: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -210,7 +220,7 @@ configure:4138: result: yes
 configure:4894: checking for strerror in -lcposix
 configure:4924: gcc -o conftest -g -O2   conftest.c -lcposix   >&5
 /usr/bin/ld: cannot find -lcposix
-collect2: ld returned 1 exit status
+collect2: error: ld returned 1 exit status
 configure:4930: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -254,7 +264,15 @@ configure:5021: test -s conftest.o
 configure:5024: $? = 0
 configure:5113: gcc -o conftest -g -O2   conftest.c  >&5
 conftest.c: In function 'main':
-conftest.c:31: warning: incompatible implicit declaration of built-in function 'exit'
+conftest.c:31:7: warning: implicit declaration of function 'exit' [-Wimplicit-function-declaration]
+       exit(2);
+       ^
+conftest.c:31:7: warning: incompatible implicit declaration of built-in function 'exit'
+conftest.c:31:7: note: include '<stdlib.h>' or provide a declaration of 'exit'
+conftest.c:32:3: warning: incompatible implicit declaration of built-in function 'exit'
+   exit (0);
+   ^
+conftest.c:32:3: note: include '<stdlib.h>' or provide a declaration of 'exit'
 configure:5116: $? = 0
 configure:5118: ./conftest
 configure:5121: $? = 0
@@ -417,7 +435,9 @@ configure:6316: checking whether we are using the GNU C Library 2.1 or newer
 configure:6347: result: yes
 configure:6355: checking whether integer division by zero raises SIGFPE
 configure:6417: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:48: warning: built-in function 'nan' declared as non-function
+conftest.c:48:5: warning: built-in function 'nan' declared as non-function
+ int nan;
+     ^
 configure:6420: $? = 0
 configure:6422: ./conftest
 configure:6425: $? = 0
@@ -652,7 +672,9 @@ configure:7057: $? = 0
 configure:7069: result: yes
 configure:6981: checking for mempcpy
 configure:7038: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:77: warning: conflicting types for built-in function 'mempcpy'
+conftest.c:77:6: warning: conflicting types for built-in function 'mempcpy'
+ char mempcpy ();
+      ^
 configure:7044: $? = 0
 configure:7048: test -z 
 			 || test ! -s conftest.err
@@ -698,7 +720,9 @@ configure:7057: $? = 0
 configure:7069: result: yes
 configure:6981: checking for stpcpy
 configure:7038: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:82: warning: conflicting types for built-in function 'stpcpy'
+conftest.c:82:6: warning: conflicting types for built-in function 'stpcpy'
+ char stpcpy ();
+      ^
 configure:7044: $? = 0
 configure:7048: test -z 
 			 || test ! -s conftest.err
@@ -708,7 +732,9 @@ configure:7057: $? = 0
 configure:7069: result: yes
 configure:6981: checking for strcasecmp
 configure:7038: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:83: warning: conflicting types for built-in function 'strcasecmp'
+conftest.c:83:6: warning: conflicting types for built-in function 'strcasecmp'
+ char strcasecmp ();
+      ^
 configure:7044: $? = 0
 configure:7048: test -z 
 			 || test ! -s conftest.err
@@ -718,7 +744,9 @@ configure:7057: $? = 0
 configure:7069: result: yes
 configure:6981: checking for strdup
 configure:7038: gcc -o conftest -g -O2   conftest.c  >&5
-conftest.c:84: warning: conflicting types for built-in function 'strdup'
+conftest.c:84:6: warning: conflicting types for built-in function 'strdup'
+ char strdup ();
+      ^
 configure:7044: $? = 0
 configure:7048: test -z 
 			 || test ! -s conftest.err
@@ -834,7 +862,7 @@ configure:7997: result: yes
 configure:8149: checking for putmsg in -lstr
 configure:8179: gcc -o conftest -g -O2   conftest.c -lstr   >&5
 /usr/bin/ld: cannot find -lstr
-collect2: ld returned 1 exit status
+collect2: error: ld returned 1 exit status
 configure:8185: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -924,7 +952,8 @@ configure: failed program was:
 configure:8211: result: no
 configure:8238: checking sys/sockio.h usability
 configure:8250: gcc -c -g -O2  conftest.c >&5
-conftest.c:104:24: error: sys/sockio.h: No such file or directory
+conftest.c:104:24: fatal error: sys/sockio.h: No such file or directory
+compilation terminated.
 configure:8256: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -1034,7 +1063,8 @@ configure: failed program was:
 configure:8279: result: no
 configure:8283: checking sys/sockio.h presence
 configure:8293: gcc -E  conftest.c
-conftest.c:70:24: error: sys/sockio.h: No such file or directory
+conftest.c:70:24: fatal error: sys/sockio.h: No such file or directory
+compilation terminated.
 configure:8299: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -1149,7 +1179,9 @@ configure:8678: result: yes
 configure:8689: checking for struct sockaddr.sa_len
 configure:8714: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
-conftest.c:81: error: 'struct sockaddr' has no member named 'sa_len'
+conftest.c:81:12: error: 'struct sockaddr' has no member named 'sa_len'
+ if (ac_aggr.sa_len)
+            ^
 configure:8720: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -1239,7 +1271,9 @@ configure: failed program was:
 | }
 configure:8760: gcc -c -g -O2  conftest.c >&5
 conftest.c: In function 'main':
-conftest.c:81: error: 'struct sockaddr' has no member named 'sa_len'
+conftest.c:81:19: error: 'struct sockaddr' has no member named 'sa_len'
+ if (sizeof ac_aggr.sa_len)
+                   ^
 configure:8766: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -1382,6 +1416,7 @@ config.status:738: creating doc/drafts/Makefile
 config.status:738: creating po/Makefile.in
 config.status:738: creating doc/texi2pod.pl
 config.status:846: creating config.h
+config.status:1084: config.h is unchanged
 config.status:1264: executing depfiles commands
 config.status:1264: executing default-1 commands
 

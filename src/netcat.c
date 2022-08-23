@@ -30,6 +30,8 @@
 #include <signal.h>
 #include <getopt.h>
 #include <time.h>		/* time(2) used as random seed */
+#include <sys/wait.h>
+#include <unistd.h>
 
 /* int gatesidx = 0; */		/* LSRR hop count */
 /* int gatesptr = 4; */		/* initial LSRR pointer, settable */
@@ -45,6 +47,7 @@ bool commandline_need_newline = FALSE;	/* fancy output handling */
 
 /* global options flags */
 nc_mode_t netcat_mode = 0;	/* Netcat working modality */
+bool opt_multi_pr = FALSE;  /// last-listening for tunnel mode */
 bool opt_eofclose = FALSE;	/* close connection on EOF from stdin */
 bool opt_debug = FALSE;		/* debugging output */
 bool opt_numeric = FALSE;	/* don't resolve hostnames */
@@ -62,6 +65,13 @@ nc_proto_t opt_proto = NETCAT_PROTO_TCP; /* protocol to use for connections */
 
 
 /* signal handling */
+static void got_child(int z)
+{
+    int savedErrno = errno;
+    while (waitpid(-1, NULL, WNOHANG) > 0)
+        continue;
+    errno = savedErrno;
+}
 
 static void got_term(int z)
 {
@@ -205,6 +215,9 @@ int main(int argc, char *argv[])
 
   /* set up the signal handling system */
   sigemptyset(&sv.sa_mask);
+  sv.sa_flags = SA_RESTART;
+  sv.sa_handler = got_child;
+  sigaction(SIGCHLD, &sv, NULL);
   sv.sa_flags = 0;
   sv.sa_handler = got_int;
   sigaction(SIGINT, &sv, NULL);
@@ -234,6 +247,7 @@ int main(int argc, char *argv[])
 	{ "interval",	required_argument,	NULL, 'i' },
 	{ "listen",	no_argument,		NULL, 'l' },
 	{ "tunnel",	required_argument,	NULL, 'L' },
+    { "multi-processes", no_argument, NULL, 'M' },
 	{ "dont-resolve", no_argument,		NULL, 'n' },
 	{ "output",	required_argument,	NULL, 'o' },
 	{ "local-port",	required_argument,	NULL, 'p' },
@@ -259,7 +273,7 @@ int main(int argc, char *argv[])
 	{ 0, 0, 0, 0 }
     };
 
-    c = getopt_long(argc, argv, "AB:cde:g:G:hi:lL:no:p:P:rs:S:tTuvVxw:z",
+    c = getopt_long(argc, argv, "AB:cde:g:G:hi:lL:Mno:p:P:rs:S:tTuvVxw:z",
 		    long_options, &option_index);
     if (c == -1)
       break;
@@ -363,6 +377,9 @@ int main(int argc, char *argv[])
 	netcat_mode = NETCAT_TUNNEL;
       } while (FALSE);
       break;
+    case 'M':           ///last-listening for tunnel mode only
+      opt_multi_pr = TRUE;
+      break;
     case 'n':			/* numeric-only, no DNS lookups */
       opt_numeric = TRUE;
       break;
@@ -438,6 +455,10 @@ int main(int argc, char *argv[])
   if (opt_zero && opt_exec)
     ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
 		_("`-e' and `-z' options are incompatible"));
+
+  if ((netcat_mode != NETCAT_TUNNEL || opt_proto != NETCAT_PROTO_TCP) && opt_multi_pr)
+	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
+		_("`-M' only used with `-L|--tunnel' and `-t'"));
 
   /* initialize the flag buffer to keep track of the specified ports */
   netcat_flag_init(65535);
@@ -557,6 +578,7 @@ int main(int argc, char *argv[])
     memcpy(&listen_sock.local_host, &local_host, sizeof(listen_sock.local_host));
     memcpy(&listen_sock.local_port, &local_port, sizeof(listen_sock.local_port));
     memcpy(&listen_sock.host, &remote_host, sizeof(listen_sock.host));
+RELISTEN:  ///for multi-processes tunnel
     accept_ret = core_listen(&listen_sock);
 
     /* in zero I/O mode the core_tcp_listen() call will always return -1
@@ -574,7 +596,7 @@ int main(int argc, char *argv[])
 
      /* in switch mode, listen on double ports, exchange data */
     if (netcat_mode == NETCAT_SWITCH) {
-        opt_eofclose = TRUE; ///force eof to exit
+        opt_eofclose = TRUE; ///force eof to exit !!
         nc_sock_t listen_sock2=listen_sock;
         //listen_sock2.local_port=listen_sock.local_port+1;
         char tempport[8];
@@ -610,6 +632,18 @@ int main(int argc, char *argv[])
     else {
       /* otherwise we are in tunnel mode.  The connect_sock var was already
          initialized by the command line arguments. */
+        if(opt_multi_pr) {
+            switch(fork()) {
+                case 0:
+                    close(listen_sock.lfd); ///In Child, Unneeded copy of listening socket
+                    break;
+                default:
+                    close(listen_sock.fd);	///In Father, Unneeded copy of connected socket 
+                    listen_sock.fd=0;
+                    goto RELISTEN;
+                    break;
+            }
+        }
       assert(netcat_mode == NETCAT_TUNNEL);
       connect_ret = core_connect(&connect_sock);
 

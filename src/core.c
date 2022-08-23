@@ -414,7 +414,8 @@ static int core_tcp_listen(nc_sock_t *ncsock)
   int sock_listen, sock_accept, timeout = ncsock->timeout;
   debug_v(("core_tcp_listen(ncsock=%p)", (void *)ncsock));
 
-  sock_listen = netcat_socket_new_listen(PF_INET, &ncsock->local_host.iaddrs[0],
+  sock_listen = ncsock->lfd ? ncsock->lfd : 
+      netcat_socket_new_listen(PF_INET, &ncsock->local_host.iaddrs[0],
 			ncsock->local_port.netnum);
   if (sock_listen < 0)
     ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
@@ -483,7 +484,10 @@ static int core_tcp_listen(nc_sock_t *ncsock)
   }			/* end of infinite accepting loop */
 
   /* we don't need a listening socket anymore */
-  close(sock_listen);
+  if(!opt_multi_pr)
+      close(sock_listen);
+  else ///otherwise we need
+      ncsock->lfd = sock_listen;
   return sock_accept;
 }				/* end of core_tcp_listen() */
 

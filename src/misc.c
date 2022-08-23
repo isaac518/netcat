@@ -311,7 +311,7 @@ void netcat_printhelp(char *argv0)
   printf("\n");
   printf(_("Mandatory arguments to long options are mandatory for short options too.\n"));
   printf(_("Options:\n"
-"  -A, --switch               listen until connect comes, start listen:PORT+1, exchange data between 2 ports\n" 
+"  -A, --switch               listen until accepted, start listen:PORT+1, exchange data between 2 ports\n" 
 "  -B, --bridge=ADDRESS:PORT  connect to somewhere, forward local port to remote address (udp deprecated !)\n"
 "  -c, --close                close connection on EOF from stdin\n"
 "  -d, --debug                debug message\n"
@@ -323,6 +323,7 @@ void netcat_printhelp(char *argv0)
 "  -l, --listen               listen mode, for inbound connects\n"));
   printf(_(""
 "  -L, --tunnel=ADDRESS:PORT  listen for inbound connects, forward local port to remote address\n"
+"  -M, --multi-processes      used with -L|--tunnel, when accepted new connection, not close listening\n"
 "  -n, --dont-resolve         numeric-only IP addresses, no DNS\n"
 "  -o, --output=FILE          output hexdump traffic to FILE (implies -x)\n"
 "  -p, --local-port=NUM       local port number\n"
