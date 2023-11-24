@@ -585,7 +585,7 @@ int netcat_socket_accept(int s, int timeout)
   if (FD_ISSET(s, &in)) {
     int new_sock;
 
-    new_sock = accept(s, NULL, NULL);
+    new_sock = accept(s, NULL, NULL); ///remote address&port not recorded
     debug_v(("Connection received (new fd=%d)", new_sock));
 
     /* NOTE: as accept() could fail, new_sock might also be a negative value.

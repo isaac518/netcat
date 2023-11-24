@@ -157,7 +157,8 @@ netcat_SOURCES = \
 	netcat.c \
 	network.c \
 	telnet.c \
-	udphelper.c
+	udphelper.c \
+	md5.c
 
 
 netcat_LDADD =  
@@ -178,7 +179,7 @@ PROGRAMS = $(bin_PROGRAMS)
 
 am_netcat_OBJECTS = core.$(OBJEXT) flagset.$(OBJEXT) misc.$(OBJEXT) \
 	netcat.$(OBJEXT) network.$(OBJEXT) telnet.$(OBJEXT) \
-	udphelper.$(OBJEXT)
+	udphelper.$(OBJEXT) md5.$(OBJEXT)
 netcat_OBJECTS = $(am_netcat_OBJECTS)
 netcat_DEPENDENCIES =
 netcat_LDFLAGS =

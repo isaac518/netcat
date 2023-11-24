@@ -32,6 +32,7 @@
 #include <time.h>		/* time(2) used as random seed */
 #include <sys/wait.h>
 #include <unistd.h>
+#include "md5.h"
 
 /* int gatesidx = 0; */		/* LSRR hop count */
 /* int gatesptr = 4; */		/* initial LSRR pointer, settable */
@@ -62,7 +63,71 @@ int opt_wait = 0;		/* wait time */
 char *opt_outputfile = NULL;	/* hexdump output file */
 char *opt_exec = NULL;		/* program to exec after connecting */
 nc_proto_t opt_proto = NETCAT_PROTO_TCP; /* protocol to use for connections */
+///For Verification mode. added at 20231123
+char * opt_signature_in = NULL;
+char * opt_signature_out = NULL;
+char * banner1 = "SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.3\n";
+char * banner2 = "Invalid SSH identification string.\n";
+static int verify_client(int fd)
+{   
+    char rbuf[16];
+    char textbuf[128];
+    int ready,siglen,read_ret;
+    time_t t,i;
+    unsigned char res[16];
+    fd_set rdfds;
+    struct timeval timeout;
 
+    memset(&timeout,0,sizeof(struct timeval)); //tv.tv_sec,tv.tv_usec
+    timeout.tv_sec=1;
+    FD_ZERO(&rdfds);
+    FD_SET(fd,&rdfds);
+    ready=select(fd+1,&rdfds,NULL,NULL,&timeout);
+
+    if(ready>0 && FD_ISSET(fd,&rdfds)) {
+        read_ret = read(fd, rbuf, 16); //sizeof md5sum
+        if(read_ret!=16) {
+            write(fd,banner1,sizeof(banner1));
+            write(fd,banner2,sizeof(banner2));
+            close(fd);
+            return 0;
+        }
+    debug_dv(("read(net) = %d", read_ret));
+
+        /* start md5 comparing */
+        siglen=strlen(opt_signature_in);
+        strncpy(textbuf,opt_signature_in,siglen);
+        t=time(NULL);
+        
+        sprintf(textbuf+siglen,"%ld",t);
+        memset(res,0,sizeof(res));
+        __md5_buffer(textbuf,strlen(textbuf),res);
+        if(!memcmp(rbuf,res,16)) {
+    debug_dv(("memcmp OK"));
+            return 1;
+        }
+
+        for(i=t-3;i<t+4;i++) {  //if time unsynchoronized
+            if(i==t)continue;
+            sprintf(textbuf+siglen,"%ld",i);
+            memset(res,0,sizeof(res));
+            __md5_buffer(textbuf,strlen(textbuf),res);
+            if(!memcmp(rbuf,res,16)) {
+    debug_dv(("memcmp OK")); 
+                return 1;
+            }
+        }
+
+    debug_dv(("memcmp Wrong")); 
+        write(fd,banner1,sizeof(banner1));
+        write(fd,banner2,sizeof(banner2));
+    }
+    if(!ready)
+    debug_dv(("select() for signature timed out")); 
+        write(fd,banner1,sizeof(banner1));
+    close(fd);
+    return 0;
+}
 
 /* signal handling */
 static void got_child(int z)
@@ -169,7 +234,7 @@ static void ncexec(nc_sock_t *ncsock)
   ///ncexec_argv[1]="-c";
   ///debug_dv(("opt_exec=%s, argc=%d, argv[0]=%s, argv[1]=%s, argv[2]=%s",opt_exec, ncexec_argc, ncexec_argv[0], ncexec_argv[1], ncexec_argv[2]));
   //execl("/bin/sh", p, "-c", opt_exec, NULL);
-  execl("/bin/sh", exec_name, "-c", command);
+  execl("/bin/sh", exec_name, "-c", command, NULL);
 #else  
   //execl(opt_exec,p,NULL);
   execv(opt_exec, exec_argv); 
@@ -205,7 +270,6 @@ int main(int argc, char *argv[])
   nc_sock_t connect_bridge_sock;
   memset(&connect_bridge_sock, 0, sizeof(listen_sock));
   connect_bridge_sock.domain = PF_INET;
-
 
 #ifdef ENABLE_NLS
   setlocale(LC_MESSAGES, "");
@@ -270,10 +334,12 @@ int main(int argc, char *argv[])
 	{ "zero",	no_argument,		NULL, 'z' },
     { "bridge", required_argument, NULL, 'B'},
     { "switch", required_argument, NULL, 'A'},
+    { "sig-in", required_argument, NULL, 'I'},
+    { "sig-out", required_argument, NULL, 'O'},
 	{ 0, 0, 0, 0 }
     };
 
-    c = getopt_long(argc, argv, "AB:cde:g:G:hi:lL:Mno:p:P:rs:S:tTuvVxw:z",
+    c = getopt_long(argc, argv, "AB:cde:g:G:hi:I:lL:Mno:O:p:P:rs:S:tTuvVxw:z",
 		    long_options, &option_index);
     if (c == -1)
       break;
@@ -341,6 +407,12 @@ int main(int argc, char *argv[])
       if (opt_interval <= 0)
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
 		_("Invalid interval time \"%s\""), optarg);
+      break;
+    case 'I':
+      opt_signature_in=optarg;
+      break;
+    case 'O':
+      opt_signature_out=optarg;
       break;
     case 'l':			/* mode flag: listen mode */
       if (netcat_mode != NETCAT_UNSPEC)
@@ -594,7 +666,11 @@ RELISTEN:  ///for multi-processes tunnel
 	      strerror(errno));
     }
 
-     /* in switch mode, listen on double ports, exchange data */
+    /* in verification mode */
+    if (opt_signature_in && !verify_client(listen_sock.fd))
+        goto RELISTEN;
+
+    /* in switch mode, listen on double ports, exchange data */
     if (netcat_mode == NETCAT_SWITCH) {
         opt_eofclose = TRUE; ///force eof to exit !!
         nc_sock_t listen_sock2=listen_sock;

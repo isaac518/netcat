@@ -202,7 +202,7 @@ configure:3474: result: /usr/bin/msgmerge
 configure:3536: checking for ld used by GCC
 configure:3599: result: /usr/bin/ld
 configure:3608: checking if the linker (/usr/bin/ld) is GNU ld
-GNU ld version 2.20.51.0.2-5.36.el6 20100205
+GNU ld version 2.20.51.0.2-5.48.el6_10.1 20100205
 configure:3620: result: yes
 configure:3626: checking for shared library run path origin
 configure:3639: result: done

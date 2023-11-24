@@ -32,7 +32,8 @@ netcat_SOURCES = \
 	netcat.c \
 	network.c \
 	telnet.c \
-	udphelper.c
+	udphelper.c \
+	md5.c
 
 netcat_LDADD = @CONTRIBLIBS@ @INTLLIBS@
 
