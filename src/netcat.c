@@ -87,8 +87,8 @@ static int verify_client(int fd)
     if(ready>0 && FD_ISSET(fd,&rdfds)) {
         read_ret = read(fd, rbuf, 16); //sizeof md5sum
         if(read_ret!=16) {
-            write(fd,banner1,sizeof(banner1));
-            write(fd,banner2,sizeof(banner2));
+            write(fd,banner1,strlen(banner1));
+            write(fd,banner2,strlen(banner2));
             close(fd);
             return 0;
         }
@@ -119,12 +119,13 @@ static int verify_client(int fd)
         }
 
     debug_dv(("memcmp Wrong")); 
-        write(fd,banner1,sizeof(banner1));
-        write(fd,banner2,sizeof(banner2));
+        write(fd,banner1,strlen(banner1));
+        write(fd,banner2,strlen(banner2));
     }
-    if(!ready)
+    if(!ready) {
     debug_dv(("select() for signature timed out")); 
-        write(fd,banner1,sizeof(banner1));
+        write(fd,banner1,strlen(banner1));
+    }
     close(fd);
     return 0;
 }
@@ -816,8 +817,8 @@ RELISTEN:  ///for multi-processes tunnel
             ncprint(ncprint_flags, "%s: %s",
                     netcat_strid(&connect_sock.host, &connect_sock.port),
                     strerror(errno));
-            usleep(500);
             connect_ret = core_connect(&connect_sock);
+            usleep(500000);
         }
 
         connect_ret = core_connect(&connect_bridge_sock);
