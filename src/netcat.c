@@ -31,8 +31,6 @@
 #include <getopt.h>
 #include <time.h>		/* time(2) used as random seed */
 #include <sys/wait.h>
-#include <unistd.h>
-#include "md5.h"
 
 /* int gatesidx = 0; */		/* LSRR hop count */
 /* int gatesptr = 4; */		/* initial LSRR pointer, settable */
@@ -59,7 +57,7 @@ bool opt_hexdump = FALSE;	/* hexdump traffic */
 bool opt_zero = FALSE;		/* zero I/O mode (don't expect anything) */
 int opt_interval = 0;		/* delay (in seconds) between lines/ports */
 int opt_verbose = 0;		/* be verbose (> 1 to be MORE verbose) */
-int opt_wait = 0;		/* wait time */
+int opt_wait = 0;		    /* wait time */
 char *opt_outputfile = NULL;	/* hexdump output file */
 char *opt_exec = NULL;		/* program to exec after connecting */
 nc_proto_t opt_proto = NETCAT_PROTO_TCP; /* protocol to use for connections */

@@ -40,6 +40,8 @@
 #include <sys/param.h>		/* defines MAXHOSTNAMELEN and other stuff */
 #include <netinet/in.h>
 #include <arpa/inet.h>		/* inet_ntop(), inet_pton() */
+#include <time.h>
+#include "md5.h"
 
 /* other misc unchecked includes */
 #if 0
