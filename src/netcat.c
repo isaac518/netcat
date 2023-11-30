@@ -408,9 +408,15 @@ int main(int argc, char *argv[])
 		_("Invalid interval time \"%s\""), optarg);
       break;
     case 'I':
+      if (strlen(optarg)>116)
+	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
+		_("Your signature is too long"));
       opt_signature_in=optarg;
       break;
     case 'O':
+      if (strlen(optarg)>116)
+	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
+		_("Your signature is too long"));
       opt_signature_out=optarg;
       break;
     case 'l':			/* mode flag: listen mode */
