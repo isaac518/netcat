@@ -306,27 +306,31 @@ void netcat_printhelp(char *argv0)
   printf(_("GNU netcat %s, a rewrite of the famous networking tool.\n"), VERSION);
   printf(_("Basic usages:\n"));
   printf(_("connect to somewhere:  %s [options] hostname port [port] ...\n"), argv0);
-  printf(_("listen for inbound:    %s -l -p port [options] [hostname] [port] ...\n"), argv0);
+  printf(_(" listen for inbound:   %s -l -p port [options] [hostname] [port] ...\n"), argv0);
   printf(_("tunnel to somewhere:   %s -L hostname:port -p port [options]\n"), argv0);
+  printf("\n");
+  printf(_("Remote port forward:\n"));
+  printf(_("      remote host A:   %s -A localhost:tunnelport -p port [options]\n"), argv0);
+  printf(_("       local host B:   %s -B targethost:port -p tunnelport [options]\n"), argv0);
   printf("\n");
   printf(_("Mandatory arguments to long options are mandatory for short options too.\n"));
   printf(_("Options:\n"
-"  -A, --switch               listen until accepted, start listen:PORT+1, exchange data between 2 ports\n" 
-"  -B, --bridge=ADDRESS:PORT  connect to somewhere, forward local port to remote address (udp deprecated !)\n"
+"  -A, --switch=ADDRESS:PORT  listen until accepted, start new listen on ADDRESS:PORT to forward\n" 
+"  -B, --bridge=ADDRESS:PORT  when connected, start new connection to ADDRESS:PORT (udp deprecated!)\n"
 "  -c, --close                close connection on EOF from stdin\n"
 "  -d, --debug                debug message\n"
 "  -e, --exec=PROGRAM         program to exec after connect\n"
 "  -g, --gateway=LIST         source-routing hop point[s], up to 8\n"
 "  -G, --pointer=NUM          source-routing pointer: 4, 8, 12, ...\n"
 "  -h, --help                 display this help and exit\n"
-"  -I, --sig-in=SIGNATURE     verify client-end by read encrypted SIGNATURE while listening\n"
+"  -I, --sig-in=SIGNATURE     verify client-end by read encrypted SIGNATURE while listen\n"
 "  -i, --interval=SECS        delay interval for lines sent, ports scanned\n"
 "  -l, --listen               listen mode, for inbound connects\n"));
   printf(_(""
 "  -L, --tunnel=ADDRESS:PORT  listen for inbound connects, forward local port to remote address\n"
 "  -M, --multi-processes      used with -L|--tunnel, when accepted new connection, not close listening\n"
 "  -n, --dont-resolve         numeric-only IP addresses, no DNS\n"
-"  -O, --sig-out=SIGNATURE    send encrypted SIGNATURE for verification while connecting\n"
+"  -O, --sig-out=SIGNATURE    send encrypted SIGNATURE for verification while connect\n"
 "  -o, --output=FILE          output hexdump traffic to FILE (implies -x)\n"
 "  -p, --local-port=NUM       local port number\n"
 "  -r, --randomize            randomize local and remote ports\n"

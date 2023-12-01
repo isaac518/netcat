@@ -55,7 +55,7 @@ bool opt_udpmode = FALSE;	/* use udp protocol instead of tcp */
 bool opt_telnet = FALSE;	/* answer in telnet mode */
 bool opt_hexdump = FALSE;	/* hexdump traffic */
 bool opt_zero = FALSE;		/* zero I/O mode (don't expect anything) */
-int opt_interval = 0;		/* delay (in seconds) between lines/ports */
+double opt_interval = 0.0;		/* delay (in seconds) between lines/ports */
 int opt_verbose = 0;		/* be verbose (> 1 to be MORE verbose) */
 int opt_wait = 0;		    /* wait time */
 char *opt_outputfile = NULL;	/* hexdump output file */
@@ -137,18 +137,18 @@ static void got_child(int z)
     errno = savedErrno;
 }
 
-static void got_term(int z)
+static void got_term(int z) ///exit immediately
 {
   if (!got_sigterm)
     ncprint(NCPRINT_VERB1, _("Terminated."));
   debug_v(("_____ RECEIVED SIGTERM _____ [signal_handler=%s]",
 	  BOOL_TO_STR(signal_handler)));
   got_sigterm = TRUE;
-  if (signal_handler)			/* default action */
+  if (signal_handler)			/* default action at external handler*/
     exit(EXIT_FAILURE);
 }
 
-static void got_int(int z)
+static void got_int(int z) ///if in core_readwrite(), close current connection and continue next port
 {
   if (!got_sigint)
     ncprint(NCPRINT_VERB1, _("Exiting."));
@@ -249,11 +249,13 @@ int main(int argc, char *argv[])
 {
   int c, glob_ret = EXIT_FAILURE;
   int total_ports, left_ports, accept_ret = -1, connect_ret = -1;
+  int usec;
   struct sigaction sv;
   nc_port_t local_port;		/* local port specified with -p option */
   nc_host_t local_host;		/* local host for bind()ing operations */
   nc_host_t remote_host;
   nc_sock_t listen_sock;
+  nc_sock_t listen_sock2; ///for Switch mode
   nc_sock_t connect_sock;
   nc_sock_t stdio_sock;
 
@@ -348,7 +350,30 @@ int main(int argc, char *argv[])
       if (netcat_mode != NETCAT_UNSPEC)
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
 		_("You can specify mode flags (`-A', `-B', `-l' and `-L') only once"));
-      netcat_mode = NETCAT_SWITCH;
+      if (opt_zero)
+	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
+		_("`-A' and `-z' options are incompatible"));
+      do {
+	    char *div = strchr(optarg, ':');
+
+        if (div && *(div + 1))
+            *div++ = '\0';
+        else
+            ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
+                    _("Invalid target string for `-A' option"));
+
+        if (!netcat_resolvehost(&listen_sock2.host, optarg))
+            ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
+                    _("Couldn't resolve switch local host: %s"), optarg);
+        if (!netcat_getport(&connect_sock.port, div, 0))
+            ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
+                    _("Invalid switch local port: %s"), div);
+
+        listen_sock2.proto = opt_proto;
+        listen_sock2.timeout = opt_wait;
+        netcat_mode = NETCAT_SWITCH;
+      } while (FALSE);
+      opt_eofclose = TRUE; ///force eof to exit !!
       break;
     case 'B':			/* mode flag: bridge mode */
       if (netcat_mode != NETCAT_UNSPEC)
@@ -402,7 +427,7 @@ int main(int argc, char *argv[])
       netcat_printhelp(argv[0]);
       exit(EXIT_SUCCESS);
     case 'i':			/* line/ports interval time (seconds) */
-      opt_interval = atoi(optarg);
+      opt_interval = atof(optarg);
       if (opt_interval <= 0)
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
 		_("Invalid interval time \"%s\""), optarg);
@@ -454,7 +479,7 @@ int main(int argc, char *argv[])
 	netcat_mode = NETCAT_TUNNEL;
       } while (FALSE);
       break;
-    case 'M':           ///last-listening for tunnel mode only
+    case 'M':           ///last-listening
       opt_multi_pr = TRUE;
       break;
     case 'n':			/* numeric-only, no DNS lookups */
@@ -533,9 +558,9 @@ int main(int argc, char *argv[])
     ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
 		_("`-e' and `-z' options are incompatible"));
 
-  if ((netcat_mode != NETCAT_TUNNEL || opt_proto != NETCAT_PROTO_TCP) && opt_multi_pr)
+  if ((netcat_mode < NETCAT_TUNNEL || opt_proto != NETCAT_PROTO_TCP) && opt_multi_pr)
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
-		_("`-M' only used with `-L|--tunnel' and `-t'"));
+		_("`-M' only used with `-L|--tunnel',`-A|--switch',`-B|--bridge' and `-t'"));
 
   /* initialize the flag buffer to keep track of the specified ports */
   netcat_flag_init(65535);
@@ -677,14 +702,12 @@ RELISTEN:  ///for multi-processes tunnel
 
     /* in switch mode, listen on double ports, exchange data */
     if (netcat_mode == NETCAT_SWITCH) {
-        opt_eofclose = TRUE; ///force eof to exit !!
-        nc_sock_t listen_sock2=listen_sock;
-        //listen_sock2.local_port=listen_sock.local_port+1;
+        /*listen_sock2=listen_sock;
         char tempport[8];
         sprintf(tempport,"%u", local_port.num+1);
         if (!netcat_getport(&listen_sock2.local_port, tempport, 0))
       ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("Invalid local port2: %s"),
-            tempport);
+            tempport);*/
         accept_ret = core_listen(&listen_sock2);
         if (accept_ret < 0) {
           if (opt_zero && (errno == ETIMEDOUT))
@@ -719,7 +742,7 @@ RELISTEN:  ///for multi-processes tunnel
                     close(listen_sock.lfd); ///In Child, Unneeded copy of listening socket
                     break;
                 default:
-                    close(listen_sock.fd);	///In Father, Unneeded copy of connected socket 
+                    close(listen_sock.fd);	///In Parent, Unneeded copy of accepted socket 
                     listen_sock.fd=0;
                     goto RELISTEN;
                     break;
@@ -741,7 +764,6 @@ RELISTEN:  ///for multi-processes tunnel
 	debug_dv(("Tunnel: EXIT (ret=%d)", glob_ret));
       }
     }
-
     /* all jobs should be ok, go to the cleanup */
     goto main_exit;
   }				/* end of listen and tunnel mode handling */
@@ -812,17 +834,20 @@ RELISTEN:  ///for multi-processes tunnel
     glob_ret = EXIT_SUCCESS;
 
     if(netcat_mode == NETCAT_BRIDGE) {
-        /* otherwise we are in bridge mode.  The connect_bridge_sock var was already
-           initialized by the command line arguments. */
+    /* otherwise we are in bridge mode(only connect first port). The connect_bridge_sock 
+          is already initialized by command line arguments. */
         
-	    assert(opt_proto != NETCAT_PROTO_UDP); ///not sure if available with udp
-        while(connect_ret < 0){
+	    assert(opt_proto != NETCAT_PROTO_UDP); ///not available with udp
+        while(connect_ret < 0){  ///if remote host not ready, don't exit!
             int ncprint_flags = NCPRINT_VERB1;
             ncprint(ncprint_flags, "%s: %s",
                     netcat_strid(&connect_sock.host, &connect_sock.port),
                     strerror(errno));
             connect_ret = core_connect(&connect_sock);
-            usleep(500000);
+            if(opt_interval)
+                sleep((unsigned int)opt_interval); ///use as heartbeat,default 2s
+            else
+                sleep(2);
         }
 
         connect_ret = core_connect(&connect_bridge_sock);
@@ -859,9 +884,12 @@ RELISTEN:  ///for multi-processes tunnel
          SIGINT signal is fully handled, the SIGTERM requires some action
          from outside that function, because of this that flag is not
          cleared. */
-      if (got_sigterm)
+      if (got_sigterm)  ///got term in core_readwrite()
 	break;
     }
+      sleep((unsigned int)opt_interval);
+      usec=(opt_interval-(unsigned int)opt_interval)*1000000;
+      usleep(usec);
   }			/* end of while (left_ports > 0) */
 
   /* all basic modes should return here for the final cleanup */

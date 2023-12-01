@@ -192,7 +192,7 @@ typedef struct {
 
 typedef struct {
   int fd, domain, timeout;
-  int lfd;                  ///remain listen fd, Multi-processes tunnel mode only
+  int lfd;
   nc_proto_t proto;
   nc_host_t local_host, host;
   nc_port_t local_port, port;

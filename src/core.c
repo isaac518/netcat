@@ -746,7 +746,8 @@ int core_readwrite(nc_sock_t *nc_main, nc_sock_t *nc_slave)
 	    break;
 
 	data_len = i;
-	delayer.tv_sec = opt_interval;
+	delayer.tv_sec = (unsigned int)opt_interval;  ///changed to double
+	delayer.tv_usec = (opt_interval-(unsigned int)opt_interval)*1000000;
       }
 
       write_ret = write(fd_sock, data, data_len);
@@ -930,7 +931,7 @@ int core_readwrite(nc_sock_t *nc_main, nc_sock_t *nc_slave)
     nc_slave->fd = -1;
   }
 
-  /* restore the extarnal signal handler */
+  /* restore the external signal handler */
   signal_handler = TRUE;
 
   return 0;
