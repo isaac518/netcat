@@ -101,7 +101,7 @@ SET_MAKE =
 SHELL = /bin/sh
 STRIP = 
 USE_NLS = yes
-VERSION = 0.7.2
+VERSION = 0.7.3
 XGETTEXT = /usr/bin/xgettext
 ac_ct_CC = gcc
 ac_ct_RANLIB = ranlib
@@ -634,7 +634,7 @@ netcat.pod: $(srcdir)/netcat.texi
 	$(TEXI2POD) $(srcdir)/netcat.texi $@
 
 $(man_MANS): netcat.pod
-	$(POD2MAN) --center="Netcat" --release="GNU Netcat 0.7.2" $? > $@
+	$(POD2MAN) --center="Netcat" --release="GNU Netcat 0.7.3" $? > $@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

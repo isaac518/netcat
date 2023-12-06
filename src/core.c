@@ -497,23 +497,7 @@ int core_connect(nc_sock_t *ncsock)
 {
   assert(ncsock);
   if (ncsock->proto == NETCAT_PROTO_TCP) {
-      ncsock->fd = core_tcp_connect(ncsock);
-    /* add send signature here ,already test write available in core_tcp_connect() */ 
-    if(opt_signature_out && ncsock->fd>=0) {
-      static char buf[64];
-      static unsigned char res[16];
-      static int siglen;
-      static time_t t;
-      siglen=strlen(opt_signature_out);
-      strncpy(buf,opt_signature_out,siglen);
-      t=time(NULL);
-      sprintf(buf+siglen,"%ld",t);
-  debug_v(("Original String is %s", buf));
-      memset(res,0,sizeof(res));
-      __md5_buffer(buf,strlen(buf),res);
-      write(ncsock->fd,res,16);
-    }
-    return ncsock->fd;
+    return ncsock->fd = core_tcp_connect(ncsock);
   }
   else if (ncsock->proto == NETCAT_PROTO_UDP)
     return ncsock->fd = core_udp_connect(ncsock);

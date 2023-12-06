@@ -260,7 +260,7 @@
 /* #undef USE_OLD_TELNET */
 
 /* Version number of package */
-#define VERSION "0.7.2"
+#define VERSION "0.7.3"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

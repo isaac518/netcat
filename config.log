@@ -158,7 +158,7 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "netcat"
-| #define VERSION "0.7.2"
+| #define VERSION "0.7.3"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
 configure:3030: result: gcc -E
@@ -177,7 +177,7 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "netcat"
-| #define VERSION "0.7.2"
+| #define VERSION "0.7.3"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
 configure:3182: checking for ranlib
@@ -231,7 +231,7 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "netcat"
-| #define VERSION "0.7.2"
+| #define VERSION "0.7.3"
 | #define ENABLE_NLS 1
 | #define HAVE_GETTEXT 1
 | #define HAVE_DCGETTEXT 1
@@ -873,7 +873,7 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "netcat"
-| #define VERSION "0.7.2"
+| #define VERSION "0.7.3"
 | #define ENABLE_NLS 1
 | #define HAVE_GETTEXT 1
 | #define HAVE_DCGETTEXT 1
@@ -964,7 +964,7 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "netcat"
-| #define VERSION "0.7.2"
+| #define VERSION "0.7.3"
 | #define ENABLE_NLS 1
 | #define HAVE_GETTEXT 1
 | #define HAVE_DCGETTEXT 1
@@ -1075,7 +1075,7 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "netcat"
-| #define VERSION "0.7.2"
+| #define VERSION "0.7.3"
 | #define ENABLE_NLS 1
 | #define HAVE_GETTEXT 1
 | #define HAVE_DCGETTEXT 1
@@ -1192,7 +1192,7 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "netcat"
-| #define VERSION "0.7.2"
+| #define VERSION "0.7.3"
 | #define ENABLE_NLS 1
 | #define HAVE_GETTEXT 1
 | #define HAVE_DCGETTEXT 1
@@ -1284,7 +1284,7 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "netcat"
-| #define VERSION "0.7.2"
+| #define VERSION "0.7.3"
 | #define ENABLE_NLS 1
 | #define HAVE_GETTEXT 1
 | #define HAVE_DCGETTEXT 1
@@ -1618,7 +1618,7 @@ SET_MAKE=''
 SHELL='/bin/sh'
 STRIP=''
 USE_NLS='yes'
-VERSION='0.7.2'
+VERSION='0.7.3'
 XGETTEXT='/usr/bin/xgettext'
 ac_ct_CC='gcc'
 ac_ct_RANLIB='ranlib'
@@ -1739,6 +1739,6 @@ target_vendor='pc'
 #define PACKAGE_VERSION ""
 #define STDC_HEADERS 1
 #define USE_LINUX_SELECT
-#define VERSION "0.7.2"
+#define VERSION "0.7.3"
 
 configure: exit 0

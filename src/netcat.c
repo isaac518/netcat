@@ -31,6 +31,7 @@
 #include <getopt.h>
 #include <time.h>		/* time(2) used as random seed */
 #include <sys/wait.h>
+#include <poll.h>
 
 /* int gatesidx = 0; */		/* LSRR hop count */
 /* int gatesptr = 4; */		/* initial LSRR pointer, settable */
@@ -62,6 +63,7 @@ char *opt_outputfile = NULL;	/* hexdump output file */
 char *opt_exec = NULL;		/* program to exec after connecting */
 nc_proto_t opt_proto = NETCAT_PROTO_TCP; /* protocol to use for connections */
 ///For Verification mode. added at 20231123
+int opt_chosen=0;
 char * opt_signature_in = NULL;
 char * opt_signature_out = NULL;
 char * banner1 = "SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.3\n";
@@ -84,7 +86,7 @@ static int verify_client(int fd)
 
     if(ready>0 && FD_ISSET(fd,&rdfds)) {
         read_ret = read(fd, rbuf, 16); //sizeof md5sum
-        if(read_ret!=16) {
+        if(read_ret!=16) {  ///not passed or remote fd closed
             write(fd,banner1,strlen(banner1));
             write(fd,banner2,strlen(banner2));
             close(fd);
@@ -126,6 +128,21 @@ static int verify_client(int fd)
     }
     close(fd);
     return 0;
+}
+void send_signature(int fd) {
+/* already test write available in core_tcp_connect() */ 
+    static char buf[64];
+    static unsigned char res[16];
+    static int siglen;
+    static time_t t;
+    siglen=strlen(opt_signature_out);
+    strncpy(buf,opt_signature_out,siglen);
+    t=time(NULL);
+    sprintf(buf+siglen,"%ld",t);
+debug_v(("Original String is %s", buf));
+    memset(res,0,sizeof(res));
+    __md5_buffer(buf,strlen(buf),res);
+    write(fd,res,16);
 }
 
 /* signal handling */
@@ -255,7 +272,6 @@ int main(int argc, char *argv[])
   nc_host_t local_host;		/* local host for bind()ing operations */
   nc_host_t remote_host;
   nc_sock_t listen_sock;
-  nc_sock_t listen_sock2; ///for Switch mode
   nc_sock_t connect_sock;
   nc_sock_t stdio_sock;
 
@@ -269,8 +285,12 @@ int main(int argc, char *argv[])
   connect_sock.domain = PF_INET;
 ///For bridge mode. added at 20210707
   nc_sock_t connect_bridge_sock;
-  memset(&connect_bridge_sock, 0, sizeof(listen_sock));
+  memset(&connect_bridge_sock, 0, sizeof(nc_sock_t));
   connect_bridge_sock.domain = PF_INET;
+///for Switch mode
+  nc_sock_t listen_sock2;
+  memset(&listen_sock2, 0, sizeof(nc_sock_t));
+  listen_sock2.domain = PF_INET;
 
 #ifdef ENABLE_NLS
   setlocale(LC_MESSAGES, "");
@@ -304,6 +324,7 @@ int main(int argc, char *argv[])
     int option_index = 0;
     static const struct option long_options[] = {
 	{ "close",	no_argument,		NULL, 'c' },
+	{ "chosen",	no_argument,		NULL, 'C' },
 	{ "debug",	no_argument,		NULL, 'd' },
 	{ "exec",	required_argument,	NULL, 'e' },
 	{ "gateway",	required_argument,	NULL, 'g' },
@@ -340,7 +361,7 @@ int main(int argc, char *argv[])
 	{ 0, 0, 0, 0 }
     };
 
-    c = getopt_long(argc, argv, "AB:cde:g:G:hi:I:lL:Mno:O:p:P:rs:S:tTuvVxw:z",
+    c = getopt_long(argc, argv, "A:B:cC:de:g:G:hi:I:lL:Mno:O:p:P:rs:S:tTuvVxw:z",
 		    long_options, &option_index);
     if (c == -1)
       break;
@@ -362,15 +383,13 @@ int main(int argc, char *argv[])
             ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
                     _("Invalid target string for `-A' option"));
 
-        if (!netcat_resolvehost(&listen_sock2.host, optarg))
+        if (!netcat_resolvehost(&listen_sock2.local_host, optarg))
             ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
                     _("Couldn't resolve switch local host: %s"), optarg);
-        if (!netcat_getport(&connect_sock.port, div, 0))
+        if (!netcat_getport(&listen_sock2.local_port, div, 0))
             ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
                     _("Invalid switch local port: %s"), div);
 
-        listen_sock2.proto = opt_proto;
-        listen_sock2.timeout = opt_wait;
         netcat_mode = NETCAT_SWITCH;
       } while (FALSE);
       opt_eofclose = TRUE; ///force eof to exit !!
@@ -402,13 +421,18 @@ int main(int argc, char *argv[])
 	  ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
 	  	  _("Invalid bridge target port: %s"), div);
 
-	connect_bridge_sock.proto = opt_proto;
-	connect_bridge_sock.timeout = opt_wait;
 	netcat_mode = NETCAT_BRIDGE;
       } while (FALSE);
+      opt_eofclose = TRUE; ///force eof to exit !!
       break;
     case 'c':			/* close connection on EOF from stdin */
       opt_eofclose = TRUE;
+      break;
+    case 'C':			/* close connection on EOF from stdin */
+      opt_chosen = atoi(optarg);
+      if(opt_chosen<1||opt_chosen>2)
+          ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
+                  _("Invalid value \"%s\", use 1 or 2"), optarg);
       break;
     case 'd':			/* enable debugging */
       opt_debug = TRUE;
@@ -474,8 +498,6 @@ int main(int argc, char *argv[])
 	  ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
 	  	  _("Invalid tunnel target port: %s"), div);
 
-	connect_sock.proto = opt_proto;
-	connect_sock.timeout = opt_wait;
 	netcat_mode = NETCAT_TUNNEL;
       } while (FALSE);
       break;
@@ -697,17 +719,14 @@ RELISTEN:  ///for multi-processes tunnel
     }
 
     /* in verification mode */
-    if (opt_signature_in && !verify_client(listen_sock.fd))
+    if (opt_signature_in && opt_chosen!=2 && !verify_client(listen_sock.fd))
         goto RELISTEN;
 
     /* in switch mode, listen on double ports, exchange data */
     if (netcat_mode == NETCAT_SWITCH) {
-        /*listen_sock2=listen_sock;
-        char tempport[8];
-        sprintf(tempport,"%u", local_port.num+1);
-        if (!netcat_getport(&listen_sock2.local_port, tempport, 0))
-      ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("Invalid local port2: %s"),
-            tempport);*/
+        listen_sock2.proto = opt_proto;
+        listen_sock2.timeout = opt_wait;
+RELISTEN2:
         accept_ret = core_listen(&listen_sock2);
         if (accept_ret < 0) {
           if (opt_zero && (errno == ETIMEDOUT))
@@ -715,11 +734,29 @@ RELISTEN:  ///for multi-processes tunnel
       ncprint(NCPRINT_VERB1 | NCPRINT_EXIT, _("Second listen failed: %s"),
             strerror(errno));
         }
+        if (opt_signature_in && opt_chosen!=1 && !verify_client(listen_sock.fd))
+            goto RELISTEN2;
+        if(opt_multi_pr) {
+      assert(netcat_mode == NETCAT_SWITCH);
+            switch(fork()) {
+                case 0:
+                    close(listen_sock.lfd); ///In Child, Unneeded copy of listening socket
+                    close(listen_sock2.lfd);
+                    listen_sock.lfd=0;
+                    listen_sock2.lfd=0;
+                    break;
+                default:
+                    close(listen_sock.fd);	///In Parent, Unneeded copy of accepted socket 
+                    close(listen_sock2.fd);
+                    listen_sock.fd=0;
+                    listen_sock2.fd=0;
+                    goto RELISTEN;
+                    break;
+            }
+        }
         core_readwrite(&listen_sock, &listen_sock2);
-        debug_dv(("Listen: EXIT"));
-        /* all jobs should be ok, go to the cleanup */
+        debug_dv(("Switch: EXIT"));
         goto main_exit;
-        
     }
 
     /* if we are in listen mode, run the core loop and exit when it returns.
@@ -736,6 +773,8 @@ RELISTEN:  ///for multi-processes tunnel
     else {
       /* otherwise we are in tunnel mode.  The connect_sock var was already
          initialized by the command line arguments. */
+	    connect_sock.proto = opt_proto;
+        connect_sock.timeout = opt_wait;
         if(opt_multi_pr) {
             switch(fork()) {
                 case 0:
@@ -759,9 +798,11 @@ RELISTEN:  ///for multi-processes tunnel
 		strerror(errno));
       }
       else {
-	glob_ret = EXIT_SUCCESS;
-	core_readwrite(&listen_sock, &connect_sock);
-	debug_dv(("Tunnel: EXIT (ret=%d)", glob_ret));
+          if(opt_signature_out)
+              send_signature(connect_sock.fd);
+          glob_ret = EXIT_SUCCESS;
+          core_readwrite(&listen_sock, &connect_sock);
+    debug_dv(("Tunnel: EXIT (ret=%d)", glob_ret));
       }
     }
     /* all jobs should be ok, go to the cleanup */
@@ -811,6 +852,7 @@ RELISTEN:  ///for multi-processes tunnel
     netcat_getport(&connect_sock.port, NULL, c);
 
     /* FIXME: in udp mode and NETCAT_CONNECT, opt_zero is senseless */
+RECONNECT:
     connect_ret = core_connect(&connect_sock);
 
     /* connection failure? (we cannot get this in UDP mode) */
@@ -828,6 +870,8 @@ RELISTEN:  ///for multi-processes tunnel
 	      strerror(errno));
       continue;			/* go with next port */
     }
+    if(netcat_mode==NETCAT_CONNECT && opt_signature_out)
+        send_signature(connect_sock.fd);
 
     /* when portscanning (or checking a single port) we are happy if AT LEAST
        ONE port is available. */
@@ -843,11 +887,34 @@ RELISTEN:  ///for multi-processes tunnel
             ncprint(ncprint_flags, "%s: %s",
                     netcat_strid(&connect_sock.host, &connect_sock.port),
                     strerror(errno));
+            sleep(10);  ///reconnect interval
             connect_ret = core_connect(&connect_sock);
-            if(opt_interval)
-                sleep((unsigned int)opt_interval); ///use as heartbeat,default 2s
-            else
-                sleep(2);
+        }
+        if(opt_signature_out && opt_chosen!=2)
+            send_signature(connect_sock.fd);
+        connect_bridge_sock.proto = opt_proto;
+        connect_bridge_sock.timeout = opt_wait;
+        if(opt_multi_pr) {
+            fd_set ins;
+            int nrdfd;
+
+            FD_ZERO(&ins);
+            FD_SET(connect_sock.fd, &ins);
+        /* fork only if we have something read */
+            nrdfd = select(connect_sock.fd+1, &ins, NULL, NULL, NULL);
+            while (nrdfd <= 0) {
+                if (errno != EINTR || !nrdfd) {
+                    ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
+                        "Critical system request failed: %s", strerror(errno));
+                    exit(EXIT_FAILURE);
+                }
+                nrdfd = select(connect_sock.fd+1, &ins, NULL, NULL, NULL);
+            }
+            if(fork()) {
+                close(connect_sock.fd);
+                connect_sock.fd=0;
+                goto RECONNECT;
+            }
         }
 
         connect_ret = core_connect(&connect_bridge_sock);
@@ -859,11 +926,12 @@ RELISTEN:  ///for multi-processes tunnel
                     strerror(errno));
         }
         else {
+            if(opt_signature_out && opt_chosen!=1)
+                send_signature(connect_bridge_sock.fd);
             glob_ret = EXIT_SUCCESS;
             core_readwrite(&connect_bridge_sock, &connect_sock);
-            debug_dv(("Bridge: EXIT (ret=%d)", glob_ret));
+        debug_dv(("Bridge child: EXIT (ret=%d)", glob_ret));
         }
-        /* all jobs should be ok, go to the cleanup */
         goto main_exit;
     }
 

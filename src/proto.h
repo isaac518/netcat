@@ -56,7 +56,8 @@ void update_timeval(struct timeval *target);
 extern nc_mode_t netcat_mode;
 extern bool opt_eofclose, opt_debug, opt_numeric, opt_random, opt_hexdump,
 	opt_telnet, opt_zero, opt_multi_pr;
-extern int opt_interval, opt_verbose, opt_wait;
+extern int opt_verbose, opt_wait;
+extern double opt_interval;
 extern char *opt_outputfile, *opt_signature_out;
 extern nc_proto_t opt_proto;
 extern FILE *output_fp;
