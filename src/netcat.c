@@ -26,6 +26,7 @@
 #include "config.h"
 #endif
 
+#define _GNU_SOURCE
 #include "netcat.h"
 #include <signal.h>
 #include <getopt.h>
@@ -68,7 +69,7 @@ char * opt_signature_in = NULL;
 char * opt_signature_out = NULL;
 char * banner1 = "SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.3\n";
 char * banner2 = "Invalid SSH identification string.\n";
-static int verify_client(int fd)
+static int verify_signature(int fd)
 {   
     char rbuf[16];
     char textbuf[128];
@@ -90,7 +91,7 @@ static int verify_client(int fd)
             write(fd,banner1,strlen(banner1));
             write(fd,banner2,strlen(banner2));
             close(fd);
-            return 0;
+            return FALSE;
         }
     debug_dv(("read(net) = %d", read_ret));
 
@@ -104,7 +105,7 @@ static int verify_client(int fd)
         __md5_buffer(textbuf,strlen(textbuf),res);
         if(!memcmp(rbuf,res,16)) {
     debug_dv(("memcmp OK"));
-            return 1;
+            return TRUE;
         }
 
         for(i=t-3;i<t+4;i++) {  //if time unsynchoronized
@@ -114,7 +115,7 @@ static int verify_client(int fd)
             __md5_buffer(textbuf,strlen(textbuf),res);
             if(!memcmp(rbuf,res,16)) {
     debug_dv(("memcmp OK")); 
-                return 1;
+                return TRUE;
             }
         }
 
@@ -127,7 +128,7 @@ static int verify_client(int fd)
         write(fd,banner1,strlen(banner1));
     }
     close(fd);
-    return 0;
+    return FALSE;
 }
 void send_signature(int fd) {
 /* already test write available in core_tcp_connect() */ 
@@ -702,7 +703,7 @@ int main(int argc, char *argv[])
     memcpy(&listen_sock.local_host, &local_host, sizeof(listen_sock.local_host));
     memcpy(&listen_sock.local_port, &local_port, sizeof(listen_sock.local_port));
     memcpy(&listen_sock.host, &remote_host, sizeof(listen_sock.host));
-RELISTEN:  ///for multi-processes tunnel
+RELISTEN:  ///for multi-processes tunnel & switch
     accept_ret = core_listen(&listen_sock);
 
     /* in zero I/O mode the core_tcp_listen() call will always return -1
@@ -719,14 +720,46 @@ RELISTEN:  ///for multi-processes tunnel
     }
 
     /* in verification mode */
-    if (opt_signature_in && opt_chosen!=2 && !verify_client(listen_sock.fd))
+    if (opt_signature_in && opt_chosen!=2 && !verify_signature(listen_sock.fd))
         goto RELISTEN;
 
     /* in switch mode, listen on double ports, exchange data */
     if (netcat_mode == NETCAT_SWITCH) {
         listen_sock2.proto = opt_proto;
         listen_sock2.timeout = opt_wait;
+        int nlfd;
+        struct pollfd spfds[2];
 RELISTEN2:
+        memset(spfds, 0, 2*sizeof(struct pollfd));
+        spfds[0].fd=listen_sock.fd;
+        spfds[0].events=POLLRDHUP|POLLHUP|POLLERR|POLLNVAL;
+        spfds[1].fd=listen_sock2.lfd ? listen_sock2.lfd : 
+            netcat_socket_new_listen(PF_INET, &listen_sock2.local_host.iaddrs[0],
+			listen_sock2.local_port.netnum);
+        listen_sock2.lfd=spfds[1].fd;
+        spfds[1].events=POLLIN|POLLERR|POLLNVAL;
+        nlfd = poll(spfds,2,-1);
+        while (nlfd <= 0) {
+            if (errno != EINTR || !nlfd) {
+                ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
+                    "Critical system request failed: %s", strerror(errno));
+                exit(EXIT_FAILURE);
+            }
+            nlfd = poll(spfds,2,-1);
+        }
+        if(spfds[0].revents) { ///connection of sock1 broken when sock2 listen
+            debug_v(("Remote socket 1 closed"));
+            close(listen_sock.fd);
+            listen_sock.fd=0;
+            goto RELISTEN;
+        }
+        if(spfds[1].revents & (POLLERR|POLLNVAL)) {
+            debug_v(("Poll() error event"));
+            close(listen_sock2.lfd);
+            listen_sock2.lfd=0;
+            goto RELISTEN2;
+        }
+
         accept_ret = core_listen(&listen_sock2);
         if (accept_ret < 0) {
           if (opt_zero && (errno == ETIMEDOUT))
@@ -734,7 +767,7 @@ RELISTEN2:
       ncprint(NCPRINT_VERB1 | NCPRINT_EXIT, _("Second listen failed: %s"),
             strerror(errno));
         }
-        if (opt_signature_in && opt_chosen!=1 && !verify_client(listen_sock.fd))
+        if (opt_signature_in && opt_chosen!=1 && !verify_signature(listen_sock.fd))
             goto RELISTEN2;
         if(opt_multi_pr) {
       assert(netcat_mode == NETCAT_SWITCH);
@@ -895,20 +928,25 @@ RECONNECT:
         connect_bridge_sock.proto = opt_proto;
         connect_bridge_sock.timeout = opt_wait;
         if(opt_multi_pr) {
-            fd_set ins;
             int nrdfd;
-
-            FD_ZERO(&ins);
-            FD_SET(connect_sock.fd, &ins);
+            struct pollfd spfd;
+            spfd.fd=connect_sock.fd;
+            spfd.events=POLLIN|POLLRDHUP|POLLHUP|POLLERR|POLLNVAL;
         /* fork only if we have something read */
-            nrdfd = select(connect_sock.fd+1, &ins, NULL, NULL, NULL);
+            nrdfd = poll(&spfd,1,-1); ///use poll instead of select to detect remote close
             while (nrdfd <= 0) {
                 if (errno != EINTR || !nrdfd) {
                     ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
                         "Critical system request failed: %s", strerror(errno));
                     exit(EXIT_FAILURE);
                 }
-                nrdfd = select(connect_sock.fd+1, &ins, NULL, NULL, NULL);
+                nrdfd = poll(&spfd,1,-1);
+            }
+            if(spfd.revents & (POLLRDHUP|POLLHUP|POLLERR|POLLNVAL)) {
+                debug_v(("Remote socket closed"));
+                close(connect_sock.fd);
+                connect_sock.fd=0;
+                goto RECONNECT;
             }
             if(fork()) {
                 close(connect_sock.fd);
