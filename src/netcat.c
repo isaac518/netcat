@@ -80,7 +80,7 @@ static int verify_signature(int fd)
     struct timeval timeout;
 
     memset(&timeout,0,sizeof(struct timeval)); //tv.tv_sec,tv.tv_usec
-    timeout.tv_sec=1;
+    timeout.tv_usec=500000; //wait 0.5 second
     FD_ZERO(&rdfds);
     FD_SET(fd,&rdfds);
     ready=select(fd+1,&rdfds,NULL,NULL,&timeout);
@@ -108,9 +108,15 @@ static int verify_signature(int fd)
             return TRUE;
         }
 
-        for(i=t-3;i<t+4;i++) {  //if time unsynchoronized
-            if(i==t)continue;
-            sprintf(textbuf+siglen,"%ld",i);
+        for(i=1;i<4;i++) {  //if time unsynchoronized
+            sprintf(textbuf+siglen,"%ld",t-i);
+            memset(res,0,sizeof(res));
+            __md5_buffer(textbuf,strlen(textbuf),res);
+            if(!memcmp(rbuf,res,16)) {
+    debug_dv(("memcmp OK")); 
+                return TRUE;
+            }
+            sprintf(textbuf+siglen,"%ld",t+i);
             memset(res,0,sizeof(res));
             __md5_buffer(textbuf,strlen(textbuf),res);
             if(!memcmp(rbuf,res,16)) {
