@@ -691,7 +691,7 @@ int main(int argc, char *argv[])
     if (netcat_mode == NETCAT_SWITCH) ///need local port specified
         if (local_port.num==0)
       ncprint(NCPRINT_ERROR | NCPRINT_EXIT, _("No local port specified. "));
-  /* Handle listen mode and tunnel mode (whose index number is higher) */
+  /* Handle listen, tunnel and switch mode(whose index number is higher) */
   if (netcat_mode > NETCAT_CONNECT && netcat_mode < NETCAT_BRIDGE) {
     /* in tunnel mode the opt_zero flag is illegal, while on listen mode it
        means that no connections should be accepted.  For UDP it means that
@@ -729,7 +729,7 @@ RELISTEN:  ///for multi-processes tunnel & switch
     if (opt_signature_in && opt_chosen!=2 && !verify_signature(listen_sock.fd))
         goto RELISTEN;
 
-    /* in switch mode, listen on double ports, exchange data */
+    /* in switch mode, listen on both ports, exchange data */
     if (netcat_mode == NETCAT_SWITCH) {
         listen_sock2.proto = opt_proto;
         listen_sock2.timeout = opt_wait;
@@ -773,7 +773,7 @@ RELISTEN2:
       ncprint(NCPRINT_VERB1 | NCPRINT_EXIT, _("Second listen failed: %s"),
             strerror(errno));
         }
-        if (opt_signature_in && opt_chosen!=1 && !verify_signature(listen_sock.fd))
+        if (opt_signature_in && opt_chosen!=1 && !verify_signature(listen_sock2.fd))
             goto RELISTEN2;
         if(opt_multi_pr) {
       assert(netcat_mode == NETCAT_SWITCH);
@@ -790,7 +790,29 @@ RELISTEN2:
                     listen_sock.fd=0;
                     listen_sock2.fd=0;
                     goto RELISTEN;
-                    break;
+            }
+        /* handle if no data read from sock2 after accept */
+            memset(spfds, 0, 2*sizeof(struct pollfd));
+            spfds[0].fd=listen_sock.fd;
+            spfds[0].events=POLLRDHUP|POLLHUP|POLLERR|POLLNVAL;
+            spfds[1].fd=listen_sock2.fd;
+            spfds[1].events=POLLIN|POLLERR|POLLNVAL;
+            nlfd = poll(spfds,2,5000); ///read timedout after 5 seconds
+            while (nlfd < 0) {
+                if (errno != EINTR) {
+                    ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
+                            "Critical system request failed: %s", strerror(errno));
+                    exit(EXIT_FAILURE);
+                }
+                nlfd = poll(spfds,2,5000);
+            }
+            if(!nlfd || spfds[0].revents || (spfds[1].revents & (POLLERR|POLLNVAL))) {
+                if(!nlfd)debug_v(("Read timedout"));
+                if(spfds[0].revents) debug_v(("Remote socket 1 closed"));
+                if(spfds[1].revents & (POLLERR|POLLNVAL)) debug_v(("Poll() error event"));
+                close(listen_sock.fd);
+                close(listen_sock2.fd);
+                goto main_exit;
             }
         }
         core_readwrite(&listen_sock, &listen_sock2);
@@ -835,8 +857,7 @@ RELISTEN2:
 	ncprint(NCPRINT_VERB1, "%s: %s",
 		netcat_strid(&connect_sock.host, &connect_sock.port),
 		strerror(errno));
-      }
-      else {
+      } else {
           if(opt_signature_out)
               send_signature(connect_sock.fd);
           glob_ret = EXIT_SUCCESS;
@@ -926,7 +947,7 @@ RECONNECT:
             ncprint(ncprint_flags, "%s: %s",
                     netcat_strid(&connect_sock.host, &connect_sock.port),
                     strerror(errno));
-            sleep(10);  ///reconnect interval
+            sleep(5);  ///reconnect interval
             connect_ret = core_connect(&connect_sock);
         }
         if(opt_signature_out && opt_chosen!=2)
@@ -938,9 +959,9 @@ RECONNECT:
             struct pollfd spfd;
             spfd.fd=connect_sock.fd;
             spfd.events=POLLIN|POLLRDHUP|POLLHUP|POLLERR|POLLNVAL;
-        /* fork only if we have something read */
-            nrdfd = poll(&spfd,1,-1); ///use poll instead of select to detect remote close
-            while (nrdfd <= 0) {
+         /* use poll instead of select to detect remote close */
+            nrdfd = poll(&spfd,1,-1);
+            while (nrdfd < 0) {
                 if (errno != EINTR || !nrdfd) {
                     ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
                         "Critical system request failed: %s", strerror(errno));
@@ -954,6 +975,7 @@ RECONNECT:
                 connect_sock.fd=0;
                 goto RECONNECT;
             }
+        /* fork only if we have something read */
             if(fork()) {
                 close(connect_sock.fd);
                 connect_sock.fd=0;
@@ -968,8 +990,7 @@ RECONNECT:
             ncprint(NCPRINT_VERB1, "%s: %s",
                     netcat_strid(&connect_bridge_sock.host, &connect_bridge_sock.port),
                     strerror(errno));
-        }
-        else {
+        } else {
             if(opt_signature_out && opt_chosen!=1)
                 send_signature(connect_bridge_sock.fd);
             glob_ret = EXIT_SUCCESS;

@@ -515,7 +515,7 @@ int netcat_socket_new_listen(int domain, const struct in_addr *addr,
   }
 
   /* now make it listening, with a reasonable backlog value */
-  ret = listen(sock, 4);
+  ret = listen(sock, 10);
   if (ret < 0) {
     ret = -4;
     goto err;

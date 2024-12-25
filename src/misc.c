@@ -311,12 +311,12 @@ void netcat_printhelp(char *argv0)
   printf("\n");
   printf(_("Reverse port forward:\n"));
   printf(_("        remote host:   %s -M -A hostname:port -p tunnelport\n"), argv0);
-  printf(_("         local host:   %s -M -B targethost:targetport -p tunnelport\n"), argv0);
+  printf(_("         local host:   %s -M -B targethost:targetport remotehost tunnelport\n"), argv0);
   printf(_("             Notice: make sure remote port receives data first\n"));
   printf("\n");
   printf(_("Connect verification:\n"));
-  printf(_("         client end:   %s -O PASS -M -L targethost:tunnelport -p port\n"), argv0);
-  printf(_("         server end:   %s -I PASS -M -L localhost:targetport -p tunnelport\n"), argv0);
+  printf(_("         client end:   %s -O PASS -M -L targethost:tunnelport -p localport\n"), argv0);
+  printf(_("         server end:   %s -I PASS -M -L hostname:targetport -p tunnelport\n"), argv0);
   printf("\n");
   printf(_("Mandatory arguments to long options are mandatory for short options too.\n"));
   printf(_("Options:\n"
