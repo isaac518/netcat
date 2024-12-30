@@ -329,6 +329,7 @@ void netcat_printhelp(char *argv0)
 "  -g, --gateway=LIST         source-routing hop point[s], up to 8\n"
 "  -G, --pointer=NUM          source-routing pointer: 4, 8, 12, ...\n"
 "  -h, --help                 display this help and exit\n"
+"  -H, --heartbeat            used with -M -A|-B in Reverse port forward, keep tunnel alive\n"
 "  -i, --interval=SECS        delay interval for lines sent, ports scanned\n"
 "  -I, --sig-in=SIGNATURE     verify client-end by read encrypted SIGNATURE while listen\n"
 "  -l, --listen               listen mode, for inbound connects\n"));

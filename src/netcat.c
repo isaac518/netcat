@@ -57,12 +57,17 @@ bool opt_udpmode = FALSE;	/* use udp protocol instead of tcp */
 bool opt_telnet = FALSE;	/* answer in telnet mode */
 bool opt_hexdump = FALSE;	/* hexdump traffic */
 bool opt_zero = FALSE;		/* zero I/O mode (don't expect anything) */
+bool opt_heartbeat = FALSE; /* heartbeat mode for SWITCH and BRIDGE */
+#define HEARTBEAT_INTERVAL 5000
+#define HEARTBEAT_MSG "NETCAT!!"
+#define HEARTBEAT_MSG_LEN 8
 double opt_interval = 0.0;		/* delay (in seconds) between lines/ports */
 int opt_verbose = 0;		/* be verbose (> 1 to be MORE verbose) */
 int opt_wait = 0;		    /* wait time */
 char *opt_outputfile = NULL;	/* hexdump output file */
 char *opt_exec = NULL;		/* program to exec after connecting */
 nc_proto_t opt_proto = NETCAT_PROTO_TCP; /* protocol to use for connections */
+
 ///For Verification mode. added at 20231123
 int opt_chosen=0;
 char * opt_signature_in = NULL;
@@ -284,8 +289,10 @@ int main(int argc, char *argv[])
   int c, glob_ret = EXIT_FAILURE;
   int total_ports, left_ports, accept_ret = -1, connect_ret = -1;
   int usec;
+  int nhbrd,nhbwr,poll_timeout=-1;
   struct sigaction sv;
   char* argM;
+  char hb_buf[8]; //heartbeat buffer
   nc_port_t local_port;		/* local port specified with -p option */
   nc_host_t local_host;		/* local host for bind()ing operations */
   nc_host_t remote_host;
@@ -347,6 +354,7 @@ int main(int argc, char *argv[])
 	{ "exec",	required_argument,	NULL, 'e' },
 	{ "gateway",	required_argument,	NULL, 'g' },
 	{ "pointer",	required_argument,	NULL, 'G' },
+	{ "heartbeat",	no_argument,		NULL, 'H' },
 	{ "help",	no_argument,		NULL, 'h' },
 	{ "interval",	required_argument,	NULL, 'i' },
 	{ "listen",	no_argument,		NULL, 'l' },
@@ -379,7 +387,7 @@ int main(int argc, char *argv[])
 	{ 0, 0, 0, 0 }
     };
 
-    c = getopt_long(argc, argv, "A:B:cC:de:g:G:hi:I:lL:Mno:O:p:P:rs:S:tTuvVxw:z",
+    c = getopt_long(argc, argv, "A:B:cC:de:g:G:Hhi:I:lL:Mno:O:p:P:rs:S:tTuvVxw:z",
 		    long_options, &option_index);
     if (c == -1)
       break;
@@ -464,6 +472,9 @@ int main(int argc, char *argv[])
     case 'G':			/* srcrt gateways pointer val */
       break;
     case 'g':			/* srcroute hop[s] */
+      break;
+    case 'H':
+      opt_heartbeat = TRUE;
       break;
     case 'h':			/* display help and exit */
       netcat_printhelp(argv[0]);
@@ -603,6 +614,10 @@ int main(int argc, char *argv[])
   if ((netcat_mode < NETCAT_TUNNEL || opt_proto != NETCAT_PROTO_TCP) && opt_multi_pr)
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
 		_("`-M' only used with `-L|--tunnel',`-A|--switch',`-B|--bridge' and `-t'"));
+
+  if ((netcat_mode <= NETCAT_TUNNEL || opt_proto != NETCAT_PROTO_TCP || !opt_multi_pr) && opt_heartbeat)
+	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
+		_("`-H' only used with `-A|--switch',`-B|--bridge', -M|--multi-processes and `-t'"));
 
   /* initialize the flag buffer to keep track of the specified ports */
   netcat_flag_init(65535);
@@ -757,14 +772,15 @@ RELISTEN2:
 			listen_sock2.local_port.netnum);
         listen_sock2.lfd=spfds[1].fd;
         spfds[1].events=POLLIN|POLLERR|POLLNVAL;
-        nlfd = poll(spfds,2,-1);
-        while (nlfd <= 0) {
-            if (errno != EINTR || !nlfd) {
+        if(opt_heartbeat)poll_timeout=HEARTBEAT_INTERVAL;
+        nlfd = poll(spfds,2,poll_timeout);
+        while (nlfd < 0) {
+            if (errno != EINTR) {
                 ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
                     "Critical system request failed: %s", strerror(errno));
                 exit(EXIT_FAILURE);
             }
-            nlfd = poll(spfds,2,-1);
+            nlfd = poll(spfds,2,poll_timeout);
         }
         if(spfds[0].revents) { ///connection of sock1 broken when sock2 listen
             debug_v(("Remote socket 1 closed"));
@@ -776,6 +792,10 @@ RELISTEN2:
             debug_v(("Poll() error event"));
             close(listen_sock2.lfd);
             listen_sock2.lfd=0;
+            goto RELISTEN2;
+        }
+        if(opt_heartbeat && !nlfd) {
+            write(listen_sock.fd,HEARTBEAT_MSG,HEARTBEAT_MSG_LEN);
             goto RELISTEN2;
         }
 
@@ -811,14 +831,14 @@ RELISTEN2:
             spfds[0].events=POLLRDHUP|POLLHUP|POLLERR|POLLNVAL;
             spfds[1].fd=listen_sock2.fd;
             spfds[1].events=POLLIN|POLLERR|POLLNVAL;
-            nlfd = poll(spfds,2,5000); ///read timedout after 5 seconds
+            nlfd = poll(spfds,2,HEARTBEAT_INTERVAL); ///read timedout after 5 seconds
             while (nlfd < 0) {
                 if (errno != EINTR) {
                     ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
                             "Critical system request failed: %s", strerror(errno));
                     exit(EXIT_FAILURE);
                 }
-                nlfd = poll(spfds,2,5000);
+                nlfd = poll(spfds,2,HEARTBEAT_INTERVAL);
             }
             if(!nlfd || spfds[0].revents || (spfds[1].revents & (POLLERR|POLLNVAL))) {
                 if(!nlfd)debug_v(("Read timedout"));
@@ -972,23 +992,31 @@ RECONNECT:
         if(opt_multi_pr) {
             int nrdfd;
             struct pollfd spfd;
+HBREPOLL:   memset(&spfd,0,sizeof(struct pollfd));
             spfd.fd=connect_sock.fd;
             spfd.events=POLLIN|POLLRDHUP|POLLHUP|POLLERR|POLLNVAL;
          /* use poll instead of select to detect remote close */
-            nrdfd = poll(&spfd,1,-1);
+            if(opt_heartbeat)poll_timeout = HEARTBEAT_INTERVAL * 3; //after 15s without heatbeat message
+            nrdfd = poll(&spfd,1,poll_timeout);
             while (nrdfd < 0) {
-                if (errno != EINTR || !nrdfd) {
+                if (errno != EINTR) {
                     ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
                         "Critical system request failed: %s", strerror(errno));
                     exit(EXIT_FAILURE);
                 }
-                nrdfd = poll(&spfd,1,-1);
+                nrdfd = poll(&spfd,1,poll_timeout);
             }
-            if(spfd.revents & (POLLRDHUP|POLLHUP|POLLERR|POLLNVAL)) {
+            if(spfd.revents & (POLLRDHUP|POLLHUP|POLLERR|POLLNVAL)||
+                    (opt_heartbeat && !nrdfd)) {
                 debug_v(("Remote socket closed"));
                 close(connect_sock.fd);
                 connect_sock.fd=0;
                 goto RECONNECT;
+            }
+            if(opt_heartbeat) {
+                nhbrd=read(connect_sock.fd,hb_buf,HEARTBEAT_MSG_LEN); //expect NETCAT!!
+                if(!strncmp(hb_buf,HEARTBEAT_MSG,HEARTBEAT_MSG_LEN))
+                    goto HBREPOLL;
             }
         /* fork only if we have something read */
             if(fork()) {
@@ -1010,6 +1038,15 @@ RECONNECT:
             if(opt_signature_out && opt_chosen!=1)
                 send_signature(connect_bridge_sock.fd);
             glob_ret = EXIT_SUCCESS;
+            if(opt_heartbeat) {
+                nhbwr=write(connect_bridge_sock.fd,hb_buf,nhbrd);
+                if(nhbwr<nhbrd) {
+            ncprint(NCPRINT_VERB1, "%s: %s",
+                    netcat_strid(&connect_bridge_sock.host, &connect_bridge_sock.port),
+                    strerror(errno));
+                    exit(EXIT_FAILURE);
+                }
+            }
             core_readwrite(&connect_bridge_sock, &connect_sock);
         debug_dv(("Bridge child: EXIT (ret=%d)", glob_ret));
         }
