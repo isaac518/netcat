@@ -152,6 +152,16 @@ debug_v(("Original String is %s", buf));
     write(fd,res,16);
 }
 
+char *search_arg(char **argv, char *arg) {
+    char **argp;
+    for(argp=argv;argp!=0;argp++)
+    {
+        if(strstr(*argp,arg))
+            return *argp;
+    }
+    return NULL;
+}
+
 /* signal handling */
 static void got_child(int z)
 {
@@ -275,6 +285,7 @@ int main(int argc, char *argv[])
   int total_ports, left_ports, accept_ret = -1, connect_ret = -1;
   int usec;
   struct sigaction sv;
+  char* argM;
   nc_port_t local_port;		/* local port specified with -p option */
   nc_host_t local_host;		/* local host for bind()ing operations */
   nc_host_t remote_host;
@@ -510,6 +521,8 @@ int main(int argc, char *argv[])
       break;
     case 'M':           ///last-listening
       opt_multi_pr = TRUE;
+      if(!(argM=search_arg(argv,"-M")))
+          argM=search_arg(argv,"--multi-processes");
       break;
     case 'n':			/* numeric-only, no DNS lookups */
       opt_numeric = TRUE;
@@ -783,6 +796,7 @@ RELISTEN2:
                     close(listen_sock2.lfd);
                     listen_sock.lfd=0;
                     listen_sock2.lfd=0;
+                    memset(argM,0,strlen(argM)); //remove -M to mark subprocess in /proc
                     break;
                 default:
                     close(listen_sock.fd);	///In Parent, Unneeded copy of accepted socket 
@@ -840,6 +854,7 @@ RELISTEN2:
             switch(fork()) {
                 case 0:
                     close(listen_sock.lfd); ///In Child, Unneeded copy of listening socket
+                    memset(argM,0,strlen(argM));
                     break;
                 default:
                     close(listen_sock.fd);	///In Parent, Unneeded copy of accepted socket 
@@ -981,6 +996,7 @@ RECONNECT:
                 connect_sock.fd=0;
                 goto RECONNECT;
             }
+            memset(argM,0,strlen(argM));
         }
 
         connect_ret = core_connect(&connect_bridge_sock);
