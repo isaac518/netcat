@@ -51,7 +51,7 @@ AUTOMAKE = ${SHELL} /root/src/netcat-0.7.1/missing --run automake-1.7
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=none
-CFLAGS = -g -O2 -Wall -O0 -g3 -ggdb3 -DDEBUG
+CFLAGS = -g -O2 -Wall
 CONTRIBLIBS = 
 CPP = gcc -E
 CPPFLAGS = 

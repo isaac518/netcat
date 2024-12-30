@@ -159,7 +159,7 @@ debug_v(("Original String is %s", buf));
 
 char *search_arg(char **argv, char *arg) {
     char **argp;
-    for(argp=argv;argp!=0;argp++)
+    for(argp=argv;*argp!=0;argp++)
     {
         if(strstr(*argp,arg))
             return *argp;
@@ -613,11 +613,11 @@ int main(int argc, char *argv[])
 
   if ((netcat_mode < NETCAT_TUNNEL || opt_proto != NETCAT_PROTO_TCP) && opt_multi_pr)
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
-		_("`-M' only used with `-L|--tunnel',`-A|--switch',`-B|--bridge' and `-t'"));
+		_("`-M|--multi-processes' only used with `-L|--tunnel',`-A|--switch',`-B|--bridge' and `-t'"));
 
   if ((netcat_mode <= NETCAT_TUNNEL || opt_proto != NETCAT_PROTO_TCP || !opt_multi_pr) && opt_heartbeat)
 	ncprint(NCPRINT_ERROR | NCPRINT_EXIT,
-		_("`-H' only used with `-A|--switch',`-B|--bridge', -M|--multi-processes and `-t'"));
+		_("`-H|--heartbeat' only used with `-A|--switch',`-B|--bridge', -M|--multi-processes and `-t'"));
 
   /* initialize the flag buffer to keep track of the specified ports */
   netcat_flag_init(65535);
@@ -794,7 +794,7 @@ RELISTEN2:
             listen_sock2.lfd=0;
             goto RELISTEN2;
         }
-        if(opt_heartbeat && !nlfd) {
+        if(opt_multi_pr && opt_heartbeat && !nlfd) {
             write(listen_sock.fd,HEARTBEAT_MSG,HEARTBEAT_MSG_LEN);
             goto RELISTEN2;
         }
@@ -816,7 +816,7 @@ RELISTEN2:
                     close(listen_sock2.lfd);
                     listen_sock.lfd=0;
                     listen_sock2.lfd=0;
-                    memset(argM,0,strlen(argM)); //remove -M to mark subprocess in /proc
+                    memset(argM,0,strlen(argM)); ///remove -M to mark subprocess in /proc
                     break;
                 default:
                     close(listen_sock.fd);	///In Parent, Unneeded copy of accepted socket 
@@ -831,14 +831,15 @@ RELISTEN2:
             spfds[0].events=POLLRDHUP|POLLHUP|POLLERR|POLLNVAL;
             spfds[1].fd=listen_sock2.fd;
             spfds[1].events=POLLIN|POLLERR|POLLNVAL;
-            nlfd = poll(spfds,2,HEARTBEAT_INTERVAL); ///read timedout after 5 seconds
+#define READ_TIMEOUT 5000
+            nlfd = poll(spfds,2,READ_TIMEOUT); ///read timedout after 5 seconds
             while (nlfd < 0) {
                 if (errno != EINTR) {
                     ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
                             "Critical system request failed: %s", strerror(errno));
                     exit(EXIT_FAILURE);
                 }
-                nlfd = poll(spfds,2,HEARTBEAT_INTERVAL);
+                nlfd = poll(spfds,2,READ_TIMEOUT);
             }
             if(!nlfd || spfds[0].revents || (spfds[1].revents & (POLLERR|POLLNVAL))) {
                 if(!nlfd)debug_v(("Read timedout"));
