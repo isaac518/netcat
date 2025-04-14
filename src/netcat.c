@@ -1003,12 +1003,15 @@ HBREPOLL:   memset(&spfd,0,sizeof(struct pollfd));
                 if (errno != EINTR) {
                     ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
                         "Critical system request failed: %s", strerror(errno));
-                    exit(EXIT_FAILURE);
+                    ///exit(EXIT_FAILURE);
+                    close(connect_sock.fd);
+                    connect_sock.fd=0;
+                    goto RECONNECT;
                 }
                 nrdfd = poll(&spfd,1,poll_timeout);
             }
             if(spfd.revents & (POLLRDHUP|POLLHUP|POLLERR|POLLNVAL)||
-                    (opt_heartbeat && !nrdfd)) {
+                    (opt_heartbeat && !nrdfd)) { //poll timed out
                 debug_v(("Remote socket closed"));
                 close(connect_sock.fd);
                 connect_sock.fd=0;
