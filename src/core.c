@@ -334,9 +334,12 @@ static int core_tcp_connect(nc_sock_t *ncsock)
 	(ncsock->local_host.iaddrs[0].s_addr ? &ncsock->local_host.iaddrs[0] :
 	NULL), ncsock->local_port.netnum);
 
-  if (sock < 0)
-    ncprint(NCPRINT_ERROR | NCPRINT_EXIT, "Couldn't create connection (err=%d): %s",
+  if (sock < 0) {
+   /// ncprint(NCPRINT_ERROR | NCPRINT_EXIT, "Couldn't create connection (err=%d): %s",
+    ncprint(NCPRINT_ERROR , "Couldn't create connection (err=%d): %s", ///handle network fault
 	    sock, strerror(errno));
+    return sock;
+  }
 
   /* initialize select()'s variables */
   FD_ZERO(&outs);

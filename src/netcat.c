@@ -289,9 +289,9 @@ int main(int argc, char *argv[])
   int c, glob_ret = EXIT_FAILURE;
   int total_ports, left_ports, accept_ret = -1, connect_ret = -1;
   int usec;
-  int nhbrd,nhbwr,poll_timeout=-1;
+  int nhbrd=-1,nhbwr=-1,poll_timeout=-1;
   struct sigaction sv;
-  char* argM;
+  char* argM = NULL;
   char hb_buf[8]; //heartbeat buffer
   nc_port_t local_port;		/* local port specified with -p option */
   nc_host_t local_host;		/* local host for bind()ing operations */
@@ -783,7 +783,7 @@ RELISTEN2:
             nlfd = poll(spfds,2,poll_timeout);
         }
         if(spfds[0].revents) { ///connection of sock1 broken when sock2 listen
-            debug_v(("Remote socket 1 closed"));
+            debug_v(("Assume socket 1 closed"));
             close(listen_sock.fd);
             listen_sock.fd=0;
             goto RELISTEN;
@@ -1052,7 +1052,7 @@ HBREPOLL:   memset(&spfd,0,sizeof(struct pollfd));
                 }
             }
             core_readwrite(&connect_bridge_sock, &connect_sock);
-        debug_dv(("Bridge child: EXIT (ret=%d)", glob_ret));
+            debug_dv(("Bridge child: EXIT (ret=%d)", glob_ret));
         }
         goto main_exit;
     }
