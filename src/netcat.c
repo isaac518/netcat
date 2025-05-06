@@ -1001,9 +1001,7 @@ HBREPOLL:   memset(&spfd,0,sizeof(struct pollfd));
             nrdfd = poll(&spfd,1,poll_timeout);
             while (nrdfd < 0) {
                 if (errno != EINTR) {
-                    ncprint(NCPRINT_ERROR | NCPRINT_EXIT, 
-                        "Critical system request failed: %s", strerror(errno));
-                    ///exit(EXIT_FAILURE);
+                    ncprint(NCPRINT_ERROR, "Critical system request failed: %s", strerror(errno));
                     close(connect_sock.fd);
                     connect_sock.fd=0;
                     goto RECONNECT;
@@ -1018,6 +1016,7 @@ HBREPOLL:   memset(&spfd,0,sizeof(struct pollfd));
                 goto RECONNECT;
             }
             if(opt_heartbeat) {
+                memset(hb_buf,0,8);
                 nhbrd=read(connect_sock.fd,hb_buf,HEARTBEAT_MSG_LEN); //expect NETCAT!!
                 if(!strncmp(hb_buf,HEARTBEAT_MSG,HEARTBEAT_MSG_LEN))
                     goto HBREPOLL;
@@ -1043,7 +1042,7 @@ HBREPOLL:   memset(&spfd,0,sizeof(struct pollfd));
                 send_signature(connect_bridge_sock.fd);
             glob_ret = EXIT_SUCCESS;
             if(opt_heartbeat) {
-                nhbwr=write(connect_bridge_sock.fd,hb_buf,nhbrd);
+                nhbwr=write(connect_bridge_sock.fd,hb_buf,nhbrd); ///here we have 8 bytes data already read
                 if(nhbwr<nhbrd) {
             ncprint(NCPRINT_VERB1, "%s: %s",
                     netcat_strid(&connect_bridge_sock.host, &connect_bridge_sock.port),
